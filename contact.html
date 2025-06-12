@@ -25,29 +25,36 @@
 
 
 <script>
-  // Run after the page has loaded
   document.addEventListener('DOMContentLoaded', function () {
     const buttons = document.querySelectorAll('.discussbutton');
     const serviceInput = document.getElementById('service');
 
     buttons.forEach(button => {
       button.addEventListener('click', function () {
-        const serviceName = this.getAttribute('data-service');
-        localStorage.setItem('selectedService', serviceName);
+        // Look for the closest .div-block-4 container
+        const parent = this.closest('.div-block-4');
+        if (!parent) return;
+
+        // Find the .service-heading inside that container
+        const heading = parent.querySelector('.service-heading');
+        if (heading) {
+          const serviceName = heading.textContent.trim();
+          localStorage.setItem('selectedService', serviceName);
+        }
       });
     });
 
-    // If contact section is reached, autofill the field
-    const hash = window.location.hash;
-    if (hash === '#contact') {
-      const selected = localStorage.getItem('selectedService');
-      if (selected && serviceInput) {
-        serviceInput.value = selected;
-        localStorage.removeItem('selectedService'); // optional: clean up after use
+    // Autofill the input on contact section load
+    if (window.location.hash === '#contact') {
+      const selectedService = localStorage.getItem('selectedService');
+      if (selectedService && serviceInput) {
+        serviceInput.value = selectedService;
+        localStorage.removeItem('selectedService');
       }
     }
   });
 </script>
+
 
 
 
