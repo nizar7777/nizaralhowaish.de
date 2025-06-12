@@ -31,29 +31,35 @@
 
     buttons.forEach(button => {
       button.addEventListener('click', function () {
-        // Look for the closest .div-block-4 container
         const parent = this.closest('.div-block-4');
         if (!parent) return;
 
-        // Find the .service-heading inside that container
         const heading = parent.querySelector('.service-heading');
         if (heading) {
           const serviceName = heading.textContent.trim();
+
+          // Update the input field immediately
+          if (serviceInput) {
+            serviceInput.value = serviceName;
+          }
+
+          // Store it in case the page reloads
           localStorage.setItem('selectedService', serviceName);
         }
       });
     });
 
-    // Autofill the input on contact section load
+    // Pre-fill from localStorage only if the input is empty
     if (window.location.hash === '#contact') {
       const selectedService = localStorage.getItem('selectedService');
-      if (selectedService && serviceInput) {
+      if (selectedService && serviceInput && !serviceInput.value) {
         serviceInput.value = selectedService;
         localStorage.removeItem('selectedService');
       }
     }
   });
 </script>
+
 
 
 
