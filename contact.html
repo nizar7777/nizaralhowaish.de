@@ -22,6 +22,36 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body>
+
+
+<script>
+  // Run after the page has loaded
+  document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.discussbutton');
+    const serviceInput = document.getElementById('service');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', function () {
+        const serviceName = this.getAttribute('data-service');
+        localStorage.setItem('selectedService', serviceName);
+      });
+    });
+
+    // If contact section is reached, autofill the field
+    const hash = window.location.hash;
+    if (hash === '#contact') {
+      const selected = localStorage.getItem('selectedService');
+      if (selected && serviceInput) {
+        serviceInput.value = selected;
+        localStorage.removeItem('selectedService'); // optional: clean up after use
+      }
+    }
+  });
+</script>
+
+
+
+  
   <section class="hero-form">
     <div class="w-layout-blockcontainer container w-container">
       <div class="hero-header">
