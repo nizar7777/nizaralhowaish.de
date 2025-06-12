@@ -22,44 +22,6 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body>
-  
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const buttons = document.querySelectorAll('.discussbutton');
-    const serviceInput = document.getElementById('service');
-
-    buttons.forEach(button => {
-      button.addEventListener('click', function () {
-        const parent = this.closest('.div-block-4');
-        if (!parent) return;
-
-        const heading = parent.querySelector('.service-heading');
-        if (heading) {
-          const serviceName = heading.textContent.trim();
-
-          // Update the input field immediately
-          if (serviceInput) {
-            serviceInput.value = serviceName;
-          }
-
-          // Store it in case the page reloads
-          localStorage.setItem('selectedService', serviceName);
-        }
-      });
-    });
-
-    // Pre-fill from localStorage only if the input is empty
-    if (window.location.hash === '#contact') {
-      const selectedService = localStorage.getItem('selectedService');
-      if (selectedService && serviceInput && !serviceInput.value) {
-        serviceInput.value = selectedService;
-        localStorage.removeItem('selectedService');
-      }
-    }
-  });
-</script>
-
-
   <section class="hero-form">
     <div class="w-layout-blockcontainer container w-container">
       <div class="hero-header">
@@ -199,6 +161,43 @@
               </div>
             </div>
           </form>
+            
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.discussbutton');
+    const serviceInput = document.getElementById('service');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', function () {
+        const parent = this.closest('.div-block-4');
+        if (!parent) return;
+
+        const heading = parent.querySelector('.service-heading');
+        if (heading) {
+          const serviceName = heading.textContent.trim();
+
+          // Update the input field immediately
+          if (serviceInput) {
+            serviceInput.value = serviceName;
+          }
+
+          // Store it in case the page reloads
+          localStorage.setItem('selectedService', serviceName);
+        }
+      });
+    });
+
+    // Pre-fill from localStorage only if the input is empty
+    if (window.location.hash === '#contact') {
+      const selectedService = localStorage.getItem('selectedService');
+      if (selectedService && serviceInput && !serviceInput.value) {
+        serviceInput.value = selectedService;
+        localStorage.removeItem('selectedService');
+      }
+    }
+  });
+</script>
+
           <div class="success-message w-form-done">
             <div class="text-size-contact">Thank you! Your submission has been received!</div>
           </div>
@@ -208,34 +207,34 @@
         </div>
       </section>
       <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar w-nav">
-        <div class="container container-large w-container">
-          <div id="" class="navbar-component">
-            <a href="index.html" data-w-id="d8e2ae47-09ad-6537-c42f-a75c2c7b427c" class="brand w-nav-brand"><img sizes="(max-width: 479px) 98vw, (max-width: 697px) 99vw, 691px" srcset="images/Artboard-2-p-500.png 500w, images/Artboard-2.png 691w" alt="" src="images/Artboard-2.png" loading="lazy" class="image-9"></a>
+    <div class="container container-large w-container">
+      <div id="" class="navbar-component">
+        <a href="index.html" data-w-id="d8e2ae47-09ad-6537-c42f-a75c2c7b427c" aria-current="page" class="brand w-nav-brand w--current"><img sizes="(max-width: 479px) 98vw, (max-width: 697px) 99vw, 691px" srcset="images/Artboard-2-p-500.png 500w, images/Artboard-2.png 691w" alt="" src="images/Artboard-2.png" loading="lazy" class="image-9"></a>
+        <div class="nav-menu-wrap">
+          <div class="right-navbar-content">
+            <a href="works.html" class="link-block-navbar w-inline-block">
+              <div>Portifolio</div>
+            </a>
+            <a href="contact.html" class="link-block-navbar w-inline-block">
+              <div>Book a service</div>
+            </a>
+            <a href="/contact#contact" class="link-block-navbar w-inline-block">
+              <div>Let&#x27;s Chat</div>
+            </a>
+          </div>
+          <div>
             <div class="nav-menu-wrap">
-              <div class="right-navbar-content">
-                <a href="works.html" class="link-block-navbar w-inline-block">
-                  <div>Portifolio</div>
-                </a>
-                <a href="contact.html" aria-current="page" class="link-block-navbar w-inline-block w--current">
-                  <div>Book a service</div>
-                </a>
-                <a href="/contact#contact" class="link-block-navbar w-inline-block">
-                  <div>Let&#x27;s Chat</div>
-                </a>
+              <div class="menu-button w-nav-button">
+                <div class="menu-icon w-icon-nav-menu"></div>
               </div>
-              <div>
-                <div class="nav-menu-wrap">
-                  <div class="menu-button w-nav-button">
-                    <div class="menu-icon w-icon-nav-menu"></div>
-                  </div>
-                </div>
-                <nav role="navigation" class="nav-menu w-nav-menu">
-                  <a href="works.html" class="nav-link w-inline-block">
-                    <div>Portifolio</div>
-                  </a>
-                  <a href="contact.html" aria-current="page" class="nav-link-2 w-nav-link w--current">Book A Service</a>
-                  <a href="/contact/#contact" class="nav-link w-inline-block">
-                    <div>Let&#x27;s Chat</div>
+            </div>
+            <nav role="navigation" class="nav-menu w-nav-menu">
+              <a href="works.html" class="nav-link w-inline-block">
+                <div>Portifolio</div>
+              </a>
+              <a href="contact.html" class="nav-link-2 w-nav-link">Book A Service</a>
+              <a href="/contact#contact" class="nav-link w-inline-block">
+                <div>Let&#x27;s Chat</div>
                   </a>
                 </nav>
               </div>
@@ -245,27 +244,27 @@
       </div>
     </div>
   </section>
+  </section>
   <section class="section-footer">
-    <div class="w-layout-blockcontainer container w-container">
-      <div class="footer-component">
-        <div data-w-id="7ed0994b-6172-61a6-586d-308ad8c58eb5" class="footer-heading"><img src="images/Sandbox-Logo.png" loading="lazy" width="224" sizes="224px" alt="Logo" srcset="images/0d2b95026520104022baab1ac20667c5_Sandbox-Logo-p-500.png 500w, images/Sandbox-Logo.png 691w"></div>
-        <div class="footer-links-component">
-          <div data-w-id="7ed0994b-6172-61a6-586d-308ad8c58eb8" class="footer-social-wrapper">
-            <a href="https://www.behance.net/nezaralhweish" class="footer-social w-inline-block"><img src="images/4691421_behance_icon.svg" loading="lazy" alt="" class="icon-links"></a>
-            <a href="https://www.facebook.com/nezar.sama" class="footer-social w-inline-block"><img src="images/Vector-1.svg" loading="lazy" alt="Logo" class="icon-links"></a>
-            <a href="https://www.instagram.com/nizar_alhowaish/" class="footer-social w-inline-block"><img src="images/logo-instagram-1.svg" loading="lazy" alt="Logo" class="icon-links"></a>
-            <a href="https://www.linkedin.com/in/nizar-alhwaish-b71ba8204/" class="footer-social w-inline-block"><img src="images/8679367_linkedin_icon.svg" loading="lazy" alt="" class="icon-links"></a>
-          </div>
-          <div data-w-id="7ed0994b-6172-61a6-586d-308ad8c58ec1" class="footer-links-wrapper">
-            <div class="credits-wrapper">
-              <p>Copyright ©</p>
-              <a href="https://nizaralhowaish.de/" target="_blank" class="credits w-inline-block">
-                <p class="credits-text">Design &amp; Developed by <span class="font-color">Nizaralhwaish</span></p>
-              </a>
-              <a href="https://github.com/" target="_blank" class="credits w-inline-block">
-                <p class="credits-text">Powered by <span class="font-color">Github</span></p>
-              </a>
-            </div>
+    <div class="w-layout-blockcontainer container w-container"></div>
+    <div class="footer-component">
+      <div data-w-id="4489c909-78a1-7a87-98a9-1ee625d91fbc" style="opacity:0" class="footer-heading"><img width="224" sizes="224px" alt="Logo" src="images/Sandbox-Logo.png" loading="lazy" srcset="images/0d2b95026520104022baab1ac20667c5_Sandbox-Logo-p-500.png 500w, images/Sandbox-Logo.png 691w"></div>
+      <div class="footer-links-component">
+        <div class="w-layout-blockcontainer footer-social-wrapper w-container">
+          <a href="https://www.behance.net/nezaralhweish" class="footer-social w-inline-block"><img loading="lazy" src="images/4691421_behance_icon.svg" alt="" class="icon-links"></a>
+          <a href="https://www.facebook.com/nezar.sama" class="footer-social w-inline-block"><img loading="lazy" src="images/Vector-1.svg" alt="Logo" class="icon-links"></a>
+          <a href="https://www.instagram.com/nizar_alhowaish/" class="footer-social w-inline-block"><img loading="lazy" src="images/logo-instagram-1.svg" alt="Logo" class="icon-links"></a>
+          <a href="https://www.linkedin.com/in/nezar-alhweish-b71ba8204/" class="footer-social w-inline-block"><img loading="lazy" src="images/8679367_linkedin_icon.svg" alt="" class="icon-links"></a>
+        </div>
+        <div data-w-id="4489c909-78a1-7a87-98a9-1ee625d91fc8" style="opacity:0" class="footer-links-wrapper">
+          <div class="credits-wrapper">
+            <p>Copyright ©</p>
+            <a href="nizaralhowaish.de="_blank" class="credits w-inline-block">
+              <p class="credits-text">Design &amp; Developed by <span class="font-color">Nizar Al-howiash</span></p>
+            </a>
+            <a href="https://github.com/" target="_blank" class="credits w-inline-block">
+              <p class="credits-text">Powered by <span class="font-color">Github</span></p>
+            </a>
           </div>
         </div>
       </div>
