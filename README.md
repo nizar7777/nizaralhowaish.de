@@ -1,2 +1,0 @@
-# nizaralhowaish.de
-website
