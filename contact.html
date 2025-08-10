@@ -22,19 +22,15 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body>
-
-
-<!-- ===== Config + Safe Loader ===== -->
+<!-- ===== Spaceremit: ONE SAFE INTEGRATION BLOCK (paste once before </body>) ===== -->
 <script>
-  // your real public key (live)
-  window.SP_PUBLIC_KEY = "pkGYSGWG6OTVCY20AA7YETVQI1BMUSR03YJ39UNW9Z10AN5CPDB4";
+  // --- Your config ---
+  window.SP_PUBLIC_KEY            = "pkGYSGWG6OTVCY20AA7YETVQI1BMUSR03YJ39UNW9Z10AN5CPDB4"; // your live public key
+  window.SP_FORM_ID               = "spaceremit-form";              // must match <form id="">
+  window.LOCAL_METHODS_PARENT_ID  = "spaceremit-local-methods-pay"; // must match a div id
+  window.CARD_BOX_PARENT_ID       = "spaceremit-card-pay";          // must match a div id
 
-  // element IDs (must match the form above)
-  window.SP_FORM_ID              = "spaceremit-form";
-  window.LOCAL_METHODS_PARENT_ID = "spaceremit-local-methods-pay";
-  window.CARD_BOX_PARENT_ID      = "spaceremit-card-pay";
-
-  // success callback -> verify with your AWS API
+  // Success callback -> verify via your AWS API
   window.SP_SUCCESSFUL_PAYMENT = function (data) {
     fetch("https://ywiyae4tgj.execute-api.us-east-1.amazonaws.com/verify-payment", {
       method: "POST",
@@ -50,23 +46,53 @@
     .catch(err => console.error("Verify error:", err));
   };
 
-  // optional (to prevent console errors if called)
-  window.SP_FAILD_PAYMENT     = function (d){ console.warn("Payment failed:", d); };
-  window.SP_CANCELLED_PAYMENT = function (d){ console.warn("Payment cancelled:", d); };
+  // Optional to silence console
+  window.SP_FAILD_PAYMENT     = function(d){ console.warn("Payment failed:", d); };
+  window.SP_CANCELLED_PAYMENT = function(d){ console.warn("Payment cancelled:", d); };
 
-  // load spaceremit.js AFTER DOM is ready so querySelector never hits null
-  document.addEventListener("DOMContentLoaded", function () {
-    // basic sanity checks
-    if (!document.getElementById(SP_FORM_ID))              console.error("Missing form id:", SP_FORM_ID);
-    if (!document.getElementById(LOCAL_METHODS_PARENT_ID)) console.error("Missing local methods id:", LOCAL_METHODS_PARENT_ID);
-    if (!document.getElementById(CARD_BOX_PARENT_ID))      console.error("Missing card box id:", CARD_BOX_PARENT_ID);
+  // --- Safe loader: waits for elements, prevents double-loading ---
+  (function loadSpaceremitSafely(){
+    // If already loaded or being loaded, bail out
+    if (window.__SPACEREMIT_LOADED__ || window.SP_LINK || document.querySelector('script[src*="spaceremit.com/api/v2/js_script/spaceremit.js"]')) {
+      return;
+    }
 
-    var s = document.createElement("script");
-    s.src = "https://spaceremit.com/api/v2/js_script/spaceremit.js";
-    s.async = false; // keep order
-    document.body.appendChild(s);
-  });
+    function elemsReady(){
+      return (
+        document.getElementById(window.SP_FORM_ID) &&
+        document.getElementById(window.LOCAL_METHODS_PARENT_ID) &&
+        document.getElementById(window.CARD_BOX_PARENT_ID)
+      );
+    }
+
+    function waitForElems(maxTries){
+      var tries = 0;
+      (function tick(){
+        if (elemsReady()){
+          // Load script once
+          window.__SPACEREMIT_LOADED__ = true;
+          var s = document.createElement("script");
+          s.src = "https://spaceremit.com/api/v2/js_script/spaceremit.js";
+          s.async = false;
+          document.body.appendChild(s);
+        } else if (tries++ < maxTries) {
+          setTimeout(tick, 120); // wait and retry
+        } else {
+          console.error("Spaceremit elements not found. Check IDs:", {
+            SP_FORM_ID, LOCAL_METHODS_PARENT_ID, CARD_BOX_PARENT_ID
+          });
+        }
+      })();
+    }
+
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      waitForElems(50); // ~6s max
+    } else {
+      document.addEventListener("DOMContentLoaded", function(){ waitForElems(50); });
+    }
+  })();
 </script>
+<!-- ===== /Spaceremit block ===== -->
 
 
 <script>
