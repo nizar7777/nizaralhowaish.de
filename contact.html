@@ -22,57 +22,45 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body>
-  <!-- Start of Spaceremit Payment Form -->
-<form id="spaceremit-form" style="width: 400px; padding: 10px;">
-    <!-- Hidden input fields for amount and currency -->
-    <input type="hidden" name="amount" value="1">
-    <input type="hidden" name="currency" value="USD">
+<!-- ===== Spaceremit Payment Form ===== -->
+<form id="spaceremit-form" style="width:400px;padding:10px;">
+  <!-- Hidden fields (put real values in prod) -->
+  <input type="hidden" name="amount"   value="1">
+  <input type="hidden" name="currency" value="USD">
+  <input type="hidden" name="fullname" value="John Doe">
+  <input type="hidden" name="email"    value="john@example.com">
+  <input type="hidden" name="phone"    value="+15551234567">
+  <input type="hidden" name="notes"    value="Order #1234">
 
-    <!-- Hidden input fields for buyer information -->
-    <input type="hidden" name="fullname" value="John Doe">
-    <input type="hidden" name="email" value="john@example.com">
-    <input type="hidden" name="phone" value="+15551234567">
-    <input type="hidden" name="notes" value="Order #1234">
+  <!-- Local payment methods -->
+  <div class="sp-one-type-select">
+    <input type="radio" name="sp-pay-type-radio" value="local-methods-pay" id="sp_local_methods_radio" checked>
+    <label for="sp_local_methods_radio"><div>Local payment methods</div></label>
+    <div id="spaceremit-local-methods-pay"></div>
+  </div>
 
-    <!-- Local payment methods -->
-    <div class="sp-one-type-select">
-        <input type="radio" name="sp-pay-type-radio" value="local-methods-pay" id="sp_local_methods_radio" checked>
-        <label for="sp_local_methods_radio"><div>Local payment methods</div></label>
-        <div id="spaceremit-local-methods-pay"></div>
-    </div>
+  <!-- Card payment -->
+  <div class="sp-one-type-select">
+    <input type="radio" name="sp-pay-type-radio" value="card-pay" id="sp_card_radio">
+    <label for="sp_card_radio"><div>Card payment</div></label>
+    <div id="spaceremit-card-pay"></div>
+  </div>
 
-    <!-- Card payment -->
-    <div class="sp-one-type-select">
-        <input type="radio" name="sp-pay-type-radio" value="card-pay" id="sp_card_radio">
-        <label for="sp_card_radio"><div>Card payment</div></label>
-        <div id="spaceremit-card-pay"></div>
-    </div>
-
-    <!-- Submit button -->
-    <div><button type="submit">Pay</button></div>
+  <div><button type="submit">Pay</button></div>
 </form>
-<!-- End of form -->
 
-<!-- Spaceremit configuration (MUST be before their script) -->
+<!-- ===== Config + Safe Loader ===== -->
 <script>
-  // Replace with your real public key from Spaceremit dashboard
-  window.SP_PUBLIC_KEY = "pk_test_or_live_xxx";
+  // your real public key (live)
+  window.SP_PUBLIC_KEY = "pkGYSGWG6OTVCY20AA7YETVQI1BMUSR03YJ39UNW9Z10AN5CPDB4";
 
-  // Must match your form ID
-  window.SP_FORM_ID = "spaceremit-form";
-
-  // Must match your div IDs inside the form
-  window.CARD_BOX_PARENT_ID = "spaceremit-card-pay";
+  // element IDs (must match the form above)
+  window.SP_FORM_ID              = "spaceremit-form";
   window.LOCAL_METHODS_PARENT_ID = "spaceremit-local-methods-pay";
-</script>
+  window.CARD_BOX_PARENT_ID      = "spaceremit-card-pay";
 
-<!-- Load Spaceremit script ONCE -->
-<script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
-
-<!-- Callbacks -->
-<script>
-  function SP_SUCCESSFUL_PAYMENT(data) {
-    // Call AWS Lambda to verify payment
+  // success callback -> verify with your AWS API
+  window.SP_SUCCESSFUL_PAYMENT = function (data) {
     fetch("https://ywiyae4tgj.execute-api.us-east-1.amazonaws.com/verify-payment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -81,19 +69,28 @@
     .then(r => r.json())
     .then(result => {
       const paid = result?.status === "success" || result?.payment_status === "PAID";
-      if (paid) {
-        alert("✅ Payment verified!");
-      } else {
-        alert("❌ Payment not verified yet.");
-      }
+      alert(paid ? "✅ Payment verified!" : "❌ Payment not verified yet.");
       console.log("Verification result:", result);
     })
-    .catch(err => console.error("Verification error:", err));
-  }
+    .catch(err => console.error("Verify error:", err));
+  };
 
-  // Optional: prevent console errors
-  function SP_FAILD_PAYMENT(data) { console.warn("Payment failed:", data); }
-  function SP_CANCELLED_PAYMENT(data) { console.warn("Payment cancelled:", data); }
+  // optional (to prevent console errors if called)
+  window.SP_FAILD_PAYMENT     = function (d){ console.warn("Payment failed:", d); };
+  window.SP_CANCELLED_PAYMENT = function (d){ console.warn("Payment cancelled:", d); };
+
+  // load spaceremit.js AFTER DOM is ready so querySelector never hits null
+  document.addEventListener("DOMContentLoaded", function () {
+    // basic sanity checks
+    if (!document.getElementById(SP_FORM_ID))              console.error("Missing form id:", SP_FORM_ID);
+    if (!document.getElementById(LOCAL_METHODS_PARENT_ID)) console.error("Missing local methods id:", LOCAL_METHODS_PARENT_ID);
+    if (!document.getElementById(CARD_BOX_PARENT_ID))      console.error("Missing card box id:", CARD_BOX_PARENT_ID);
+
+    var s = document.createElement("script");
+    s.src = "https://spaceremit.com/api/v2/js_script/spaceremit.js";
+    s.async = false; // keep order
+    document.body.appendChild(s);
+  });
 </script>
 
 
