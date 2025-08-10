@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sat Jun 07 2025 22:58:06 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!-- test23 This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sat Jun 07 2025 22:58:06 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="67a8e83eede1a0f937f77a08" data-wf-site="67a8e83eede1a0f937f779a1">
 <head>
   <meta charset="utf-8">
@@ -21,28 +21,9 @@
   <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
+  <script src="https://spaceremit.com/api/v2/js_script/spaceremit.js" ></script><!-- Script tag to include Spaceremit JavaScript library -->
+
 <body>
-<script>
-const SP_PUBLIC_KEY = "test_pk4YTFRP4VMMFMIG3VFTNCNRWF9IEAQG5OIFG5X1D65VX69K201K"; //Your website public key
-const SP_FORM_ID = "#spaceremit-form"; // Identifier for the form
-const SP_SELECT_RADIO_NAME = "sp-pay-type-radio"; // Name attribute of radio buttons
-
-const LOCAL_METHODS_BOX_STATUS = true; // Status of local payment methods box
-const LOCAL_METHODS_PARENT_ID = "#spaceremit-local-methods-pay"; // Identifier for the container of local payment methods
-
-const CARD_BOX_STATUS = true; // Status of card payment box
-const CARD_BOX_PARENT_ID = "#spaceremit-card-pay"; // Identifier for the container of card payment
-let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = true; // Flag indicating whether the form should automatically submit when getting a code
-
-// Callback function for successful payment
-function SP_SUCCESSFUL_PAYMENT(spaceremit_code) {}
-// Callback function for failed payment
-function SP_FAILD_PAYMENT() {}
-// Callback function for receiving message
-function SP_RECIVED_MESSAGE(message) {alert(message);}
-// Callback function for needing authentication
-function SP_NEED_AUTH(target_auth_link) {}
-</script>
 <!-- Start of form -->
 <form id="spaceremit-form" style="width: 400px;padding: 10px;"> 
     <!-- Hidden input fields for amount and currency -->
@@ -79,6 +60,7 @@ function SP_NEED_AUTH(target_auth_link) {}
     <div><button type="submit">pay</button></div>
     
 </form> <!-- End of form -->
+
 
   
 <script>
