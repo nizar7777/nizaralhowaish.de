@@ -132,6 +132,22 @@
     }
   });
 </script>
+<!-- FORM must be before script -->
+<form id="spaceremit-form">
+  <!-- Local payment -->
+  <div id="spaceremit-local-methods-pay"></div>
+  <!-- Card payment -->
+  <div id="spaceremit-card-pay"></div>
+</form>
+
+<script>
+  window.SP_PUBLIC_KEY = "pk_test_or_live_xxx";
+  window.SP_FORM_ID = "spaceremit-form";
+  window.CARD_BOX_PARENT_ID = "spaceremit-card-pay";
+  window.LOCAL_METHODS_PARENT_ID = "spaceremit-local-methods-pay";
+</script>
+
+<script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
 
     
   <section class="hero-form">
