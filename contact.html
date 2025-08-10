@@ -22,32 +22,7 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body>
-<!-- ===== Spaceremit Payment Form ===== -->
-<form id="spaceremit-form" style="width:400px;padding:10px;">
-  <!-- Hidden fields (put real values in prod) -->
-  <input type="hidden" name="amount"   value="1">
-  <input type="hidden" name="currency" value="USD">
-  <input type="hidden" name="fullname" value="John Doe">
-  <input type="hidden" name="email"    value="john@example.com">
-  <input type="hidden" name="phone"    value="+15551234567">
-  <input type="hidden" name="notes"    value="Order #1234">
 
-  <!-- Local payment methods -->
-  <div class="sp-one-type-select">
-    <input type="radio" name="sp-pay-type-radio" value="local-methods-pay" id="sp_local_methods_radio" checked>
-    <label for="sp_local_methods_radio"><div>Local payment methods</div></label>
-    <div id="spaceremit-local-methods-pay"></div>
-  </div>
-
-  <!-- Card payment -->
-  <div class="sp-one-type-select">
-    <input type="radio" name="sp-pay-type-radio" value="card-pay" id="sp_card_radio">
-    <label for="sp_card_radio"><div>Card payment</div></label>
-    <div id="spaceremit-card-pay"></div>
-  </div>
-
-  <div><button type="submit">Pay</button></div>
-</form>
 
 <!-- ===== Config + Safe Loader ===== -->
 <script>
