@@ -22,38 +22,57 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body>
-  <!-- Define before loading Spaceremit -->
+  <!-- Start of Spaceremit Payment Form -->
+<form id="spaceremit-form" style="width: 400px; padding: 10px;">
+    <!-- Hidden input fields for amount and currency -->
+    <input type="hidden" name="amount" value="1">
+    <input type="hidden" name="currency" value="USD">
+
+    <!-- Hidden input fields for buyer information -->
+    <input type="hidden" name="fullname" value="John Doe">
+    <input type="hidden" name="email" value="john@example.com">
+    <input type="hidden" name="phone" value="+15551234567">
+    <input type="hidden" name="notes" value="Order #1234">
+
+    <!-- Local payment methods -->
+    <div class="sp-one-type-select">
+        <input type="radio" name="sp-pay-type-radio" value="local-methods-pay" id="sp_local_methods_radio" checked>
+        <label for="sp_local_methods_radio"><div>Local payment methods</div></label>
+        <div id="spaceremit-local-methods-pay"></div>
+    </div>
+
+    <!-- Card payment -->
+    <div class="sp-one-type-select">
+        <input type="radio" name="sp-pay-type-radio" value="card-pay" id="sp_card_radio">
+        <label for="sp_card_radio"><div>Card payment</div></label>
+        <div id="spaceremit-card-pay"></div>
+    </div>
+
+    <!-- Submit button -->
+    <div><button type="submit">Pay</button></div>
+</form>
+<!-- End of form -->
+
+<!-- Spaceremit configuration (MUST be before their script) -->
 <script>
-  const SP_PUBLIC_KEY = "pkGYSGWG6OTVCY20AA7YETVQI1BMUSR03YJ39UNW9Z10AN5CPDB4";  // Your real public key
-  const SP_FORM_ID = "spaceremit-form";         // Matches your <form id="">
+  // Replace with your real public key from Spaceremit dashboard
+  window.SP_PUBLIC_KEY = "pk_test_or_live_xxx";
+
+  // Must match your form ID
+  window.SP_FORM_ID = "spaceremit-form";
+
+  // Must match your div IDs inside the form
+  window.CARD_BOX_PARENT_ID = "spaceremit-card-pay";
+  window.LOCAL_METHODS_PARENT_ID = "spaceremit-local-methods-pay";
 </script>
 
-<!-- Then load their script -->
+<!-- Load Spaceremit script ONCE -->
 <script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
 
-  <!-- Spaceremit checkout script -->
-<script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
-
-<!-- === Spaceremit REQUIRED globals === -->
+<!-- Callbacks -->
 <script>
-  // 1) Put your real public key here (test or live)
-  const SP_PUBLIC_KEY = "pkGYSGWG6OTVCY20AA7YETVQI1BMUSR03YJ39UNW9Z10AN5CPDB4";
-
-  // 2) This must match your form's id attribute
-  const SP_FORM_ID = "spaceremit-form";
-
-  // Optional: any defaults you want to pass (amount/currency also read from hidden inputs)
-  // const SP_DEFAULTS = { currency: "USD" };
-</script>
-
-<!-- Spaceremit checkout script -->
-<script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
-
-<!-- Your callbacks -->
-<script>
-  // Fired by Spaceremit after a successful client-side payment
   function SP_SUCCESSFUL_PAYMENT(data) {
-    // data.SP_payment_code should be present
+    // Call AWS Lambda to verify payment
     fetch("https://ywiyae4tgj.execute-api.us-east-1.amazonaws.com/verify-payment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -63,19 +82,20 @@
     .then(result => {
       const paid = result?.status === "success" || result?.payment_status === "PAID";
       if (paid) {
-        alert("Payment verified! ✅");
+        alert("✅ Payment verified!");
       } else {
-        alert("Payment not verified yet. Please contact support.");
-        console.log("Verification:", result);
+        alert("❌ Payment not verified yet.");
       }
+      console.log("Verification result:", result);
     })
-    .catch(err => console.error("Verify error:", err));
+    .catch(err => console.error("Verification error:", err));
   }
 
-  // Optional (avoid console errors if Spaceremit calls them)
-  function SP_FAILD_PAYMENT(data){ console.warn("Payment failed:", data); }
-  function SP_CANCELLED_PAYMENT(data){ console.warn("Payment cancelled:", data); }
+  // Optional: prevent console errors
+  function SP_FAILD_PAYMENT(data) { console.warn("Payment failed:", data); }
+  function SP_CANCELLED_PAYMENT(data) { console.warn("Payment cancelled:", data); }
 </script>
+
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
