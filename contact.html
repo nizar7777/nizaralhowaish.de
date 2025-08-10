@@ -25,30 +25,26 @@
   <!-- Spaceremit checkout script -->
 <script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
 
+<!-- === Spaceremit REQUIRED globals === -->
 <script>
-  // Replace with your real Public Key from the Spaceremit dashboard
-  const SP_PUBLIC_KEY = "pk_live_or_test_xxx";
+  // 1) Put your real public key here (test or live)
+  const SP_PUBLIC_KEY = "pkGYSGWG6OTVCY20AA7YETVQI1BMUSR03YJ39UNW9Z10AN5CPDB4";
 
-  // Minimal init – adjust fields to what your account requires
-  window.SPACEREMIT_CONFIG = {
-    public_key: SP_PUBLIC_KEY,
-    // optional/custom:
-    // currency: "USD",
-    // amount: 100.00,
-    // email: "",
-    // phone: "",
-    // order_id: "",
-    // etc.
-  };
+  // 2) This must match your form's id attribute
+  const SP_FORM_ID = "spaceremit-form";
 
-  // Optional: define other callbacks so the script never errors
-  function SP_FAILD_PAYMENT(data){ console.warn("Payment failed:", data); }  // (typo is per their docs)
-  function SP_CANCELLED_PAYMENT(data){ console.warn("Payment cancelled:", data); }
+  // Optional: any defaults you want to pass (amount/currency also read from hidden inputs)
+  // const SP_DEFAULTS = { currency: "USD" };
 </script>
 
+<!-- Spaceremit checkout script -->
+<script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
+
+<!-- Your callbacks -->
 <script>
-  // This is called when payment is successful in Spaceremit's checkout widget
+  // Fired by Spaceremit after a successful client-side payment
   function SP_SUCCESSFUL_PAYMENT(data) {
+    // data.SP_payment_code should be present
     fetch("https://ywiyae4tgj.execute-api.us-east-1.amazonaws.com/verify-payment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -56,18 +52,20 @@
     })
     .then(r => r.json())
     .then(result => {
-      console.log("Verification result:", result);
-      if (result?.status === "success" || result?.payment_status === "PAID") {
-        alert("Payment verified successfully!");
+      const paid = result?.status === "success" || result?.payment_status === "PAID";
+      if (paid) {
+        alert("Payment verified! ✅");
       } else {
-        alert("Payment could not be verified yet.");
+        alert("Payment not verified yet. Please contact support.");
+        console.log("Verification:", result);
       }
     })
-    .catch(err => {
-      console.error("Verification error:", err);
-      alert("Error verifying payment");
-    });
+    .catch(err => console.error("Verify error:", err));
   }
+
+  // Optional (avoid console errors if Spaceremit calls them)
+  function SP_FAILD_PAYMENT(data){ console.warn("Payment failed:", data); }
+  function SP_CANCELLED_PAYMENT(data){ console.warn("Payment cancelled:", data); }
 </script>
 
 <script>
