@@ -23,38 +23,48 @@
 </head>
 <body>
 
-<!-- Keep your existing service->contact autofill logic -->
+<!-- ===== Spaceremit CONFIG (place before including spaceremit.js) ===== -->
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const buttons = document.querySelectorAll('.discussbutton');
-    const serviceInput = document.getElementById('service');
+  // Follow Spaceremit docs: use CSS selectors (with #) for element targets
+  const SP_PUBLIC_KEY = "pkGYSGWG6OTVCY20AA7YETVQI1BMUSR03YJ39UNW9Z10AN5CPDB4";
+  const SP_FORM_ID = "#spaceremit-form";
+  const SP_SELECT_RADIO_NAME = "sp-pay-type-radio";
 
-    buttons.forEach(button => {
-      button.addEventListener('click', function () {
-        const parent = this.closest('.div-block-4');
-        if (!parent) return;
+  const LOCAL_METHODS_BOX_STATUS = true;
+  const LOCAL_METHODS_PARENT_ID = "#spaceremit-local-methods-pay";
 
-        const heading = parent.querySelector('.service-heading');
-        if (heading) {
-          const serviceName = heading.textContent.trim();
+  const CARD_BOX_STATUS = true;
+  const CARD_BOX_PARENT_ID = "#spaceremit-card-pay";
 
-          if (serviceInput) {
-            serviceInput.value = serviceName;
-          }
-          localStorage.setItem('selectedService', serviceName);
-        }
-      });
-    });
+  let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = true;
 
-    if (window.location.hash === '#contact') {
-      const selectedService = localStorage.getItem('selectedService');
-      if (selectedService && serviceInput && !serviceInput.value) {
-        serviceInput.value = selectedService;
-        localStorage.removeItem('selectedService');
-      }
-    }
-  });
+  // REQUIRED callbacks (names per Spaceremit)
+  function SP_SUCCESSFUL_PAYMENT(spaceremit_code) {
+    // spaceremit_code is usually the same as SP_payment_code added to the form
+    fetch("https://ywiyae4tgj.execute-api.us-east-1.amazonaws.com/verify-payment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ payment_id: spaceremit_code || (window.SP_payment_code || "") })
+    })
+    .then(r => r.json())
+    .then(result => {
+      const paid = result?.response_status === "success" ||
+                   result?.status === "success" ||
+                   result?.data?.status === "Completed" ||
+                   result?.payment_status === "PAID";
+      alert(paid ? "✅ Payment verified!" : "❌ Not verified yet.");
+      console.log("Verification result:", result);
+    })
+    .catch(err => console.error("Verify error:", err));
+  }
+
+  function SP_FAILD_PAYMENT() {}
+  function SP_RECIVED_MESSAGE(message) { console.log("Spaceremit:", message); }
+  function SP_NEED_AUTH(target_auth_link) { console.warn("Auth required:", target_auth_link); }
 </script>
+
+<!-- ===== Include Spaceremit ONCE (after the config, after your form exists) ===== -->
+<script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
 
   <section class="hero-form">
     <div class="w-layout-blockcontainer container w-container">
