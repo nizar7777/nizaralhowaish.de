@@ -1,0 +1,44 @@
+<!-- callback.html -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Payment callback</title></head>
+<body>
+  <form id="spaceremit-form">
+    <input type="hidden" name="amount" value="1">
+    <input type="hidden" name="currency" value="USD">
+    <div id="spaceremit-local-methods-pay"></div>
+    <div id="spaceremit-card-pay"></div>
+  </form>
+
+  <script>
+    const SP_PUBLIC_KEY = "test_pk4YTFRP4VMMFMIG3VFTNCNRWF9IEAQG5OIFG5X1D65VX69K201K";
+    const SP_FORM_ID = "#spaceremit-form";
+    const SP_SELECT_RADIO_NAME = "sp-pay-type-radio";
+    const LOCAL_METHODS_BOX_STATUS = false;
+    const LOCAL_METHODS_PARENT_ID = "#spaceremit-local-methods-pay";
+    const CARD_BOX_STATUS = false;
+    const CARD_BOX_PARENT_ID = "#spaceremit-card-pay";
+    let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = true; // important on callback
+
+    async function SP_SUCCESSFUL_PAYMENT(spaceremit_code){
+      const r = await fetch('/.netlify/functions/verify-payment',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ payment_id: spaceremit_code })
+      });
+      const data = await r.json();
+      const ok = new Set(['A','B','D','E']); // acceptable per docs
+      if (data?.data && ok.has(data.data.status_tag)) {
+        document.body.innerHTML = `<h1>✅ Payment verified</h1><pre>${data.data.status}</pre>`;
+      } else {
+        document.body.innerHTML = `<h1>❌ Not verified</h1><pre>${data?.data?.status ?? 'unknown'}</pre>`;
+      }
+    }
+    function SP_FAILD_PAYMENT(){ document.body.innerHTML = '<h1>❌ Payment failed</h1>'; }
+    function SP_RECIVED_MESSAGE(m){ console.log(m); }
+    function SP_NEED_AUTH(link){ location.href = link; }
+  </script>
+
+  <script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
+</body>
+</html>
