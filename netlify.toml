@@ -1,1 +1,16 @@
 
+[build]
+  publish = "/"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/verify-payment"
+  to = "/.netlify/functions/verify-payment"
+  status = 200
+
+[[redirects]]
+  from = "/payment-callback"
+  to = "/.netlify/functions/payment-callback"
+  status = 200
