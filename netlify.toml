@@ -1,19 +1,1 @@
-# Root of the site inside the repo
-[build]
-  base = "nizaralhowaish.de"
-  publish = "."                # serve files from nizaralhowaish.de/
-  # command = "npm run build"  # uncomment if you have a build step
 
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
-
-[[redirects]]
-  from = "/verify-payment"
-  to = "/.netlify/functions/verify-payment"
-  status = 200
-
-[[redirects]]
-  from = "/payment-callback"
-  to = "/.netlify/functions/payment-callback"
-  status = 200
