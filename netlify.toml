@@ -1,6 +1,8 @@
+# Root of the site inside the repo
 [build]
-  command = "npm run build"
-  publish = "dist"            # or "build" / "public" — must match your output folder
+  base = "nizaralhowaish.de"
+  publish = "."                # serve files from nizaralhowaish.de/
+  # command = "npm run build"  # uncomment if you have a build step
 
 [functions]
   directory = "netlify/functions"
