@@ -251,71 +251,250 @@
 
 
 
-<!-- index.html -->
-<form id="spaceremit-form" style="width:400px;padding:10px">
-  <!-- required hidden fields -->
-  <input type="hidden" name="amount"   value="1">
-  <input type="hidden" name="currency" value="USD">
-  <input type="hidden" name="fullname" value="John Doe">
-  <input type="hidden" name="email"    value="john@example.com">
-  <input type="hidden" name="phone"    value="+15550001111">
-  <input type="hidden" name="notes"    value="Order #1234">
+  <div class="container">
+        <div class="header">
+            <h1>💼 Service Payment</h1>
+            <p>Secure payment powered by SpaceRemit</p>
+        </div>
 
-  <!-- local vs card -->
-  <div class="sp-one-type-select">
-    <input type="radio" name="sp-pay-type-radio" value="local-methods-pay" id="sp_local_methods_radio" checked>
-    <label for="sp_local_methods_radio"><div>Local payment methods</div></label>
-    <div id="spaceremit-local-methods-pay"></div>
-  </div>
+        <div class="form-container">
+            <div id="message-container"></div>
 
-  <div class="sp-one-type-select">
-    <input type="radio" name="sp-pay-type-radio" value="card-pay" id="sp_card_radio">
-    <label for="sp_card_radio"><div>Card payment</div></label>
-    <div id="spaceremit-card-pay"></div>
-  </div>
+            <!-- Service Selection -->
+            <div class="service-selection">
+                <h3>📊 Service Details</h3>
+                <div class="hours-input">
+                    <label for="hours">Hours:</label>
+                    <input type="number" id="hours" min="1" max="100" value="1" required>
+                </div>
+                <div class="price-display">
+                    <div>Rate: <strong>$10.00 per hour</strong></div>
+                    <div class="price">Total: $<span id="total-price">10.00</span></div>
+                </div>
+            </div>
 
-  <button type="submit">Pay</button>
-</form>
+            <!-- Customer Information -->
+            <div class="customer-info">
+                <h3>👤 Customer Information</h3>
+                <div class="form-group">
+                    <label for="fullname">Full Name *</label>
+                    <input type="text" id="fullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Additional Notes (Optional)</label>
+                    <textarea id="notes" placeholder="Any special requirements or notes..."></textarea>
+                </div>
+            </div>
 
-<script>
-  // ===== Spaceremit client config (from their docs) =====
-  const SP_PUBLIC_KEY = "pkGYSGWG6OTVCY20AA7YETVQI1BMUSR03YJ39UNW9Z10AN5CPDB4";         // use test key first
-  const SP_FORM_ID = "#spaceremit-form";
-  const SP_SELECT_RADIO_NAME = "sp-pay-type-radio";
-  const LOCAL_METHODS_BOX_STATUS = true;
-  const LOCAL_METHODS_PARENT_ID = "#spaceremit-local-methods-pay";
-  const CARD_BOX_STATUS = true;
-  const CARD_BOX_PARENT_ID = "#spaceremit-card-pay";
-  let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = true;
+            <!-- Loading Indicator -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                Processing payment...
+            </div>
 
-  // Callbacks (library will call these)
-  async function SP_SUCCESSFUL_PAYMENT(spaceremit_code) {
-    // Verify server-side on Netlify Function
-    const res  = await fetch('/.netlify/functions/verify-payment', {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify({ payment_id: spaceremit_code })
-    });
-    const data = await res.json();
+            <!-- SpaceRemit Payment Form -->
+            <form id="spaceremit-form">
+                <!-- Hidden input fields for amount and currency -->
+                <input type="hidden" name="amount" value="10">
+                <input type="hidden" name="currency" value="USD">
+                
+                <!-- Hidden input fields for buyer information -->
+                <input type="hidden" name="fullname" value="">
+                <input type="hidden" name="email" value="">
+                <input type="hidden" name="phone" value="">
+                <input type="hidden" name="notes" value="">
 
-    // Accept only A/B/D/E per docs
-    const okTags = new Set(['A','B','D','E']);
-    if (data?.data && okTags.has(data.data.status_tag)) {
-      alert('Payment verified ✅ (' + data.data.status + ')');
-      // …fulfill order here…
-    } else {
-      alert('Payment not verified ❌ (' + (data?.data?.status ?? 'unknown') + ')');
-    }
-  }
-  function SP_FAILD_PAYMENT(){ alert('Payment failed'); }
-  function SP_RECIVED_MESSAGE(msg){ console.log(msg); }
-  function SP_NEED_AUTH(link){ window.location = link; }
-</script>
+                <!-- Container for local payment methods -->
+                <div class="sp-one-type-select">
+                    <input type="radio" name="sp-pay-type-radio" value="local-methods-pay" id="sp_local_methods_radio" checked>
+                    <label for="sp_local_methods_radio">
+                        <div>Local payment methods</div>
+                    </label>
+                    <div id="spaceremit-local-methods-pay"></div>
+                </div>
 
-<!-- MUST be after the config: loads their library -->
-<script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
+                <!-- Container for card payment -->
+                <div class="sp-one-type-select">
+                    <input type="radio" name="sp-pay-type-radio" value="card-pay" id="sp_card_radio">
+                    <label for="sp_card_radio">
+                        <div>Card payment</div>
+                    </label>
+                    <div id="spaceremit-card-pay"></div>
+                </div>
 
+                <!-- Submit button -->
+                <div class="submit-container">
+                    <button type="submit" class="pay-button" id="pay-button">
+                        🔒 Pay Securely Now
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
+    <!-- SpaceRemit JavaScript Library -->
+    <script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
+
+    <script>
+        // SpaceRemit Configuration
+        const SP_PUBLIC_KEY = "test_pk4YTFRP4VMMFMIG3VFTNCNRWF9IEAQG5OIFG5X1D65VX69K201K"; // Test public key
+        const SP_FORM_ID = "#spaceremit-form";
+        const SP_SELECT_RADIO_NAME = "sp-pay-type-radio";
+        const LOCAL_METHODS_BOX_STATUS = true;
+        const LOCAL_METHODS_PARENT_ID = "#spaceremit-local-methods-pay";
+        const CARD_BOX_STATUS = true;
+        const CARD_BOX_PARENT_ID = "#spaceremit-card-pay";
+        let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = true;
+
+        // DOM Elements
+        const hoursInput = document.getElementById('hours');
+        const totalPriceElement = document.getElementById('total-price');
+        const fullnameInput = document.getElementById('fullname');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const notesInput = document.getElementById('notes');
+        const payButton = document.getElementById('pay-button');
+        const loadingElement = document.getElementById('loading');
+        const messageContainer = document.getElementById('message-container');
+        const spaceremitForm = document.getElementById('spaceremit-form');
+
+        // Price calculation
+        const HOURLY_RATE = 10.00;
+
+        function updatePrice() {
+            const hours = parseInt(hoursInput.value) || 1;
+            const total = (hours * HOURLY_RATE).toFixed(2);
+            totalPriceElement.textContent = total;
+            
+            // Update hidden form field
+            spaceremitForm.querySelector('input[name="amount"]').value = total;
+        }
+
+        function updateFormData() {
+            // Update hidden form fields with customer information
+            spaceremitForm.querySelector('input[name="fullname"]').value = fullnameInput.value;
+            spaceremitForm.querySelector('input[name="email"]').value = emailInput.value;
+            spaceremitForm.querySelector('input[name="phone"]').value = phoneInput.value;
+            spaceremitForm.querySelector('input[name="notes"]').value = `Hours: ${hoursInput.value} | Notes: ${notesInput.value}`;
+        }
+
+        function showMessage(message, type = 'error') {
+            messageContainer.innerHTML = `<div class="${type}">${message}</div>`;
+            messageContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function validateForm() {
+            if (!fullnameInput.value.trim()) {
+                showMessage('Please enter your full name.');
+                fullnameInput.focus();
+                return false;
+            }
+
+            if (!emailInput.value.trim()) {
+                showMessage('Please enter your email address.');
+                emailInput.focus();
+                return false;
+            }
+
+            if (!phoneInput.value.trim()) {
+                showMessage('Please enter your phone number.');
+                phoneInput.focus();
+                return false;
+            }
+
+            const hours = parseInt(hoursInput.value);
+            if (!hours || hours < 1 || hours > 100) {
+                showMessage('Please enter a valid number of hours (1-100).');
+                hoursInput.focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        // Event listeners
+        hoursInput.addEventListener('input', updatePrice);
+
+        spaceremitForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!validateForm()) {
+                return;
+            }
+
+            updateFormData();
+            showLoading(true);
+            
+            // Clear any previous messages
+            messageContainer.innerHTML = '';
+
+            // Allow the form to submit normally after validation
+            setTimeout(() => {
+                spaceremitForm.submit();
+            }, 100);
+        });
+
+        function showLoading(show) {
+            if (show) {
+                loadingElement.classList.add('show');
+                payButton.disabled = true;
+                payButton.textContent = 'Processing...';
+            } else {
+                loadingElement.classList.remove('show');
+                payButton.disabled = false;
+                payButton.textContent = '🔒 Pay Securely Now';
+            }
+        }
+
+        // SpaceRemit Callback Functions
+        function SP_SUCCESSFUL_PAYMENT(spaceremit_code) {
+            showLoading(false);
+            showMessage(`✅ Payment successful! Transaction ID: ${spaceremit_code}. You will be redirected shortly.`, 'success');
+            
+            // Optionally redirect to a success page
+            setTimeout(() => {
+                window.location.href = '/success.html?transaction=' + spaceremit_code;
+            }, 3000);
+        }
+
+        function SP_FAILD_PAYMENT() {
+            showLoading(false);
+            showMessage('❌ Payment failed. Please try again or contact support if the issue persists.');
+        }
+
+        function SP_RECIVED_MESSAGE(message) {
+            showLoading(false);
+            showMessage(`ℹ️ ${message}`);
+        }
+
+        function SP_NEED_AUTH(target_auth_link) {
+            showLoading(false);
+            showMessage('🔐 Additional authentication required. Please complete the verification process.');
+            // Optionally open the auth link
+            if (target_auth_link) {
+                window.open(target_auth_link, '_blank');
+            }
+        }
+
+        // Initialize
+        updatePrice();
+        
+        // Auto-fill demo data (remove in production)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            fullnameInput.value = 'John Doe';
+            emailInput.value = 'john@example.com';
+            phoneInput.value = '+1234567890';
+            notesInput.value = 'Test payment';
+        }
+    </script>
 
 
 
