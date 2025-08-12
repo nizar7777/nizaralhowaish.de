@@ -123,3 +123,48 @@ exports.handler = async (event, context) => {
         statusTag: statusTag,
         isSuccessful: isSuccessful,
         amount: paymentData.total_amount,
+        currency: paymentData.currency,
+        buyerPaidAmount: paymentData.buyer_payed_amount,
+        sellerReceivedAmount: paymentData.seller_received_amount,
+        date: paymentData.date,
+        notes: paymentData.notes,
+        type: paymentData.type,
+        fees: {
+          totalFees: paymentData.total_fees,
+          buyerFees: paymentData.buyer_total_fees,
+          sellerFees: paymentData.seller_total_fees
+        },
+        statusDescription: getStatusDescription(statusTag)
+      })
+    };
+
+  } catch (error) {
+    console.error('Error verifying payment:', error);
+    
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error.message
+      })
+    };
+  }
+};
+
+// Helper function to get human-readable status description
+function getStatusDescription(statusTag) {
+  const statusMap = {
+    'A': 'Completed - Payment completed and amount transferred to the seller',
+    'B': 'Pending - Payment added to seller\'s pending balance, awaiting delivery of service',
+    'C': 'Refused - Payment refused. Transaction did not go through',
+    'D': 'Waiting a Holding Time - Payment waiting for holding time, but added to seller\'s pending balance',
+    'E': 'Need Our Review - Payment needs review, but amount added to seller\'s pending balance',
+    'F': 'Not Paid - Payment not completed. This is only a deposit; no funds have been transferred',
+    'G': 'Canceled - Payment canceled by either buyer or seller before completion',
+    'H': 'Refunded - Payment refunded to the buyer',
+    'T': 'Test Payment - Test payment, not involving real funds. Used for testing purposes only'
+  };
+
+  return statusMap[statusTag] || `Unknown status: ${statusTag}`;
+}
