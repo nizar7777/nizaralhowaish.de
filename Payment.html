@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Payment - SpaceRemit</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .service-selection {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+
+        .service-selection h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .hours-input {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .hours-input label {
+            font-weight: bold;
+            color: #34495e;
+            min-width: 60px;
+        }
+
+        .hours-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .hours-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .price-display {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+
+        .price-display .price {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .customer-info {
+            margin-bottom: 30px;
+        }
+
+        .customer-info h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        /* SpaceRemit Form Styles */
+        #spaceremit-form {
+            width: 100% !important;
+            padding: 0 !important;
+        }
+
+        .sp-one-type-select {
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sp-one-type-select:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .sp-one-type-select input[type="radio"] {
+            display: none;
+        }
+
+        .sp-one-type-select label {
+            display: block;
+            padding: 20px;
+            cursor: pointer;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .sp-one-type-select input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .sp-one-type-select label div {
+            font-weight: bold;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+        }
+
+        .sp-one-type-select label div:before {
+            content: "💳";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .sp-one-type-select:first-child label div:before {
+            content: "🏦";
+        }
+
+        #spaceremit-local-methods-pay,
+        #spaceremit-card-pay {
+            padding: 20px;
+            background: white;
+        }
+
+        .submit-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .pay-button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pay-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
+        }
+
+        .pay-button:active {
+            transform: translateY(0);
+        }
+
+        .pay-button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        @media (max-width: 768px) {
+            .hours-input {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .hours-input label {
+                min-width: auto;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💼 Service Payment</h1>
+            <p>Secure payment powered by SpaceRemit</p>
+        </div>
+
+        <div class="form-container">
+            <div id="message-container"></div>
+
+            <!-- Service Selection -->
+            <div class="service-selection">
+                <h3>📊 Service Details</h3>
+                <div class="hours-input">
+                    <label for="hours">Hours:</label>
+                    <input type="number" id="hours" min="1" max="100" value="1" required>
+                </div>
+                <div class="price-display">
+                    <div>Rate: <strong>$10.00 per hour</strong></div>
+                    <div class="price">Total: $<span id="total-price">10.00</span></div>
+                </div>
+            </div>
+
+            <!-- Customer Information -->
+            <div class="customer-info">
+                <h3>👤 Customer Information</h3>
+                <div class="form-group">
+                    <label for="fullname">Full Name *</label>
+                    <input type="text" id="fullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Additional Notes (Optional)</label>
+                    <textarea id="notes" placeholder="Any special requirements or notes..."></textarea>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                Processing payment...
+            </div>
+
+            <!-- SpaceRemit Payment Form -->
+            <form id="spaceremit-form">
+                <!-- Hidden input fields for amount and currency -->
+                <input type="hidden" name="amount" value="10">
+                <input type="hidden" name="currency" value="USD">
+                
+                <!-- Hidden input fields for buyer information -->
+                <input type="hidden" name="fullname" value="">
+                <input type="hidden" name="email" value="">
+                <input type="hidden" name="phone" value="">
+                <input type="hidden" name="notes" value="">
+
+                <!-- Container for local payment methods -->
+                <div class="sp-one-type-select">
+                    <input type="radio" name="sp-pay-type-radio" value="local-methods-pay" id="sp_local_methods_radio" checked>
+                    <label for="sp_local_methods_radio">
+                        <div>Local payment methods</div>
+                    </label>
+                    <div id="spaceremit-local-methods-pay"></div>
+                </div>
+
+                <!-- Container for card payment -->
+                <div class="sp-one-type-select">
+                    <input type="radio" name="sp-pay-type-radio" value="card-pay" id="sp_card_radio">
+                    <label for="sp_card_radio">
+                        <div>Card payment</div>
+                    </label>
+                    <div id="spaceremit-card-pay"></div>
+                </div>
+
+                <!-- Submit button -->
+                <div class="submit-container">
+                    <button type="submit" class="pay-button" id="pay-button">
+                        🔒 Pay Securely Now
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SpaceRemit JavaScript Library -->
+    <script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
+
+    <script>
+        // SpaceRemit Configuration
+        const SP_PUBLIC_KEY = "test_pk4YTFRP4VMMFMIG3VFTNCNRWF9IEAQG5OIFG5X1D65VX69K201K"; // Test public key
+        const SP_FORM_ID = "#spaceremit-form";
+        const SP_SELECT_RADIO_NAME = "sp-pay-type-radio";
+        const LOCAL_METHODS_BOX_STATUS = true;
+        const LOCAL_METHODS_PARENT_ID = "#spaceremit-local-methods-pay";
+        const CARD_BOX_STATUS = true;
+        const CARD_BOX_PARENT_ID = "#spaceremit-card-pay";
+        let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = true;
+
+        // DOM Elements
+        const hoursInput = document.getElementById('hours');
+        const totalPriceElement = document.getElementById('total-price');
+        const fullnameInput = document.getElementById('fullname');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const notesInput = document.getElementById('notes');
+        const payButton = document.getElementById('pay-button');
+        const loadingElement = document.getElementById('loading');
+        const messageContainer = document.getElementById('message-container');
+        const spaceremitForm = document.getElementById('spaceremit-form');
+
+        // Price calculation
+        const HOURLY_RATE = 10.00;
+
+        function updatePrice() {
+            const hours = parseInt(hoursInput.value) || 1;
+            const total = (hours * HOURLY_RATE).toFixed(2);
+            totalPriceElement.textContent = total;
+            
+            // Update hidden form field
+            spaceremitForm.querySelector('input[name="amount"]').value = total;
+        }
+
+        function updateFormData() {
+            // Update hidden form fields with customer information
+            spaceremitForm.querySelector('input[name="fullname"]').value = fullnameInput.value;
+            spaceremitForm.querySelector('input[name="email"]').value = emailInput.value;
+            spaceremitForm.querySelector('input[name="phone"]').value = phoneInput.value;
+            spaceremitForm.querySelector('input[name="notes"]').value = `Hours: ${hoursInput.value} | Notes: ${notesInput.value}`;
+        }
+
+        function showMessage(message, type = 'error') {
+            messageContainer.innerHTML = `<div class="${type}">${message}</div>`;
+            messageContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function validateForm() {
+            if (!fullnameInput.value.trim()) {
+                showMessage('Please enter your full name.');
+                fullnameInput.focus();
+                return false;
+            }
+
+            if (!emailInput.value.trim()) {
+                showMessage('Please enter your email address.');
+                emailInput.focus();
+                return false;
+            }
+
+            if (!phoneInput.value.trim()) {
+                showMessage('Please enter your phone number.');
+                phoneInput.focus();
+                return false;
+            }
+
+            const hours = parseInt(hoursInput.value);
+            if (!hours || hours < 1 || hours > 100) {
+                showMessage('Please enter a valid number of hours (1-100).');
+                hoursInput.focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        // Event listeners
+        hoursInput.addEventListener('input', updatePrice);
+
+        spaceremitForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!validateForm()) {
+                return;
+            }
+
+            updateFormData();
+            showLoading(true);
+            
+            // Clear any previous messages
+            messageContainer.innerHTML = '';
+
+            // Allow the form to submit normally after validation
+            setTimeout(() => {
+                spaceremitForm.submit();
+            }, 100);
+        });
+
+        function showLoading(show) {
+            if (show) {
+                loadingElement.classList.add('show');
+                payButton.disabled = true;
+                payButton.textContent = 'Processing...';
+            } else {
+                loadingElement.classList.remove('show');
+                payButton.disabled = false;
+                payButton.textContent = '🔒 Pay Securely Now';
+            }
+        }
+
+        // SpaceRemit Callback Functions
+        function SP_SUCCESSFUL_PAYMENT(spaceremit_code) {
+            showLoading(false);
+            showMessage(`✅ Payment successful! Transaction ID: ${spaceremit_code}. You will be redirected shortly.`, 'success');
+            
+            // Optionally redirect to a success page
+            setTimeout(() => {
+                window.location.href = '/success.html?transaction=' + spaceremit_code;
+            }, 3000);
+        }
+
+        function SP_FAILD_PAYMENT() {
+            showLoading(false);
+            showMessage('❌ Payment failed. Please try again or contact support if the issue persists.');
+        }
+
+        function SP_RECIVED_MESSAGE(message) {
+            showLoading(false);
+            showMessage(`ℹ️ ${message}`);
+        }
+
+        function SP_NEED_AUTH(target_auth_link) {
+            showLoading(false);
+            showMessage('🔐 Additional authentication required. Please complete the verification process.');
+            // Optionally open the auth link
+            if (target_auth_link) {
+                window.open(target_auth_link, '_blank');
+            }
+        }
+
+        // Initialize
+        updatePrice();
+        
+        // Auto-fill demo data (remove in production)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            fullnameInput.value = 'John Doe';
+            emailInput.value = 'john@example.com';
+            phoneInput.value = '+1234567890';
+            notesInput.value = 'Test payment';
+        }
+    </script>
+</body>
+</html>
