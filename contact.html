@@ -307,7 +307,7 @@ function SP_NEED_AUTH(target_auth_link) {}
 
 
 <!-- Start of form -->
-<form id="spaceremit-form" style="width: 400px;padding: 10px;"> 
+<form action="netlify/functions/verify-payment.js" id="spaceremit-form" style="width: 400px;padding: 10px;"> 
     <!-- Hidden input fields for amount and currency -->
     <input type="hidden" name="amount"  value="1">
     <input type="hidden" name="currency" value="USD">
