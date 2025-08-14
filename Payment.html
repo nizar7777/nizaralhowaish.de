@@ -621,6 +621,11 @@
         function SP_RECIVED_MESSAGE(message) {
             console.log('SpaceRemit message:', message);
             showMessage(message, 'info');
+            
+            // If payment method is disabled, show specific help
+            if (message.toLowerCase().includes('disabled')) {
+                showMessage('Payment method temporarily disabled. Please try the other payment option or contact support.', 'error');
+            }
         }
 
         // Callback function for needing authentication
