@@ -1,32 +1,39 @@
-import type { Context, Config } from "@netlify/functions";
+// netlify/functions/callback.js
+// Webhook handler for SpaceRemit payment notifications
 
-export default async (req: Request, context: Context) => {
+exports.handler = async (event, context) => {
   // Only allow POST requests for webhook callbacks
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
       headers: {
         'Content-Type': 'application/json',
-      }
-    });
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({ error: 'Method not allowed' })
+    };
   }
 
   try {
     // Parse the webhook payload from SpaceRemit
-    const webhookData = await req.json();
+    const webhookData = JSON.parse(event.body);
     
     console.log('Received SpaceRemit webhook:', JSON.stringify(webhookData, null, 2));
 
     // Validate webhook data
     if (!webhookData.data || !webhookData.data.id) {
       console.error('Invalid webhook payload:', webhookData);
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: 'Invalid webhook payload' 
-      }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return {
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify({ 
+          success: false, 
+          error: 'Invalid webhook payload' 
+        })
+      };
     }
 
     const paymentData = webhookData.data;
@@ -61,33 +68,41 @@ export default async (req: Request, context: Context) => {
     }
 
     // Always respond with success to acknowledge the webhook
-    return new Response(JSON.stringify({ 
-      success: true,
-      message: 'Webhook processed successfully',
-      payment_id: paymentData.id,
-      processed_at: new Date().toISOString()
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({ 
+        success: true,
+        message: 'Webhook processed successfully',
+        payment_id: paymentData.id,
+        processed_at: new Date().toISOString()
+      })
+    };
 
   } catch (error) {
     console.error('Webhook processing error:', error);
     
     // Return error but don't fail completely
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: 'Webhook processing failed',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return {
+      statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({ 
+        success: false, 
+        error: 'Webhook processing failed',
+        details: error.message || 'Unknown error'
+      })
+    };
   }
 };
 
 // Function to notify about received payments
-async function notifyPaymentReceived(paymentData: any) {
+async function notifyPaymentReceived(paymentData) {
   try {
     console.log(`New payment received: $${paymentData.total_amount} ${paymentData.currency}`);
     console.log(`Payment ID: ${paymentData.id}`);
@@ -98,8 +113,8 @@ async function notifyPaymentReceived(paymentData: any) {
     // For example, send yourself an email about the new payment
     
     /*
-    const SENDGRID_API_KEY = Netlify.env.get('SENDGRID_API_KEY');
-    const NOTIFICATION_EMAIL = Netlify.env.get('NOTIFICATION_EMAIL') || 'nizar@nizaralhowaish.de';
+    const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+    const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || 'nizar@nizaralhowaish.de';
     
     if (SENDGRID_API_KEY) {
       const emailResponse = await fetch('https://api.sendgrid.com/v3/mail/send', {
@@ -153,7 +168,3 @@ async function notifyPaymentReceived(paymentData: any) {
     console.error('Failed to send payment notification:', error);
   }
 }
-
-export const config: Config = {
-  path: "/callback"
-};
