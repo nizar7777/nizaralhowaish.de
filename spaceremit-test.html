@@ -317,7 +317,112 @@
         }, 2000);
     </script>
     
-    <!-- SpaceRemit JavaScript Library -->
-    <script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
+    <!-- SpaceRemit JavaScript Library with fallback -->
+    <script>
+        // Function to load SpaceRemit script with fallbacks
+        function loadSpaceRemitScript() {
+            const scriptUrls = [
+                'https://spaceremit.com/api/v2/js_script/spaceremit.js',
+                'https://cdn.spaceremit.com/api/v2/js_script/spaceremit.js',
+                'https://spaceremit.com/js/spaceremit.js'
+            ];
+            
+            let currentIndex = 0;
+            
+            function tryLoadScript() {
+                if (currentIndex >= scriptUrls.length) {
+                    addStatus('❌ All SpaceRemit script URLs failed to load', 'error');
+                    addStatus('📞 Please contact SpaceRemit support or check your internet connection', 'error');
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.src = scriptUrls[currentIndex];
+                script.async = true;
+                
+                script.onload = function() {
+                    addStatus('✅ SpaceRemit script loaded from: ' + scriptUrls[currentIndex], 'success');
+                    // Wait a moment for the script to initialize
+                    setTimeout(() => {
+                        if (typeof window.spaceremit !== 'undefined') {
+                            addStatus('✅ SpaceRemit API is ready!', 'success');
+                        } else {
+                            addStatus('⚠️ Script loaded but API not available', 'error');
+                        }
+                    }, 1000);
+                };
+                
+                script.onerror = function() {
+                    addStatus('❌ Failed to load from: ' + scriptUrls[currentIndex], 'error');
+                    currentIndex++;
+                    setTimeout(tryLoadScript, 1000); // Try next URL after 1 second
+                };
+                
+                addStatus('📡 Trying to load SpaceRemit script from: ' + scriptUrls[currentIndex], 'info');
+                document.head.appendChild(script);
+            }
+            
+            tryLoadScript();
+        }
+        
+        // Start loading script after page is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadSpaceRemitScript);
+        } else {
+            loadSpaceRemitScript();
+        }
+    </script>
+    
+    <!-- Alternative: Try loading the original script as backup -->
+    <script>
+        // Backup: Try direct script loading after 5 seconds if primary method fails
+        setTimeout(() => {
+            if (typeof window.spaceremit === 'undefined') {
+                addStatus('🔄 Trying backup script loading method...', 'info');
+                
+                // Create script element directly
+                const backupScript = document.createElement('script');
+                backupScript.src = 'https://spaceremit.com/api/v2/js_script/spaceremit.js';
+                backupScript.async = false; // Load synchronously
+                backupScript.defer = false;
+                
+                backupScript.onload = () => addStatus('✅ Backup script loading successful!', 'success');
+                backupScript.onerror = () => addStatus('❌ Backup script loading also failed', 'error');
+                
+                document.head.appendChild(backupScript);
+            }
+        }, 5000);
+        
+        // Final check after 10 seconds
+        setTimeout(() => {
+            const debugInfo = document.getElementById('debug-output');
+            const currentContent = debugInfo.innerHTML;
+            
+            debugInfo.innerHTML = currentContent + `<br><br>
+                <strong style="color: red;">Final Status Check:</strong><br>
+                SpaceRemit Available: ${typeof window.spaceremit !== 'undefined'}<br>
+                Network Status: ${navigator.onLine ? 'Online' : 'Offline'}<br>
+                User Agent: ${navigator.userAgent}<br>
+                Current Domain: ${window.location.hostname}<br>
+                Protocol: ${window.location.protocol}<br><br>
+                
+                <strong>Troubleshooting Tips:</strong><br>
+                1. Check if you're using HTTPS (required by SpaceRemit)<br>
+                2. Disable ad blockers temporarily<br>
+                3. Check browser console for CORS errors<br>
+                4. Try different browser<br>
+                5. Contact SpaceRemit support with your domain
+            `;
+            
+            if (typeof window.spaceremit === 'undefined') {
+                addStatus('🆘 FINAL DIAGNOSIS: SpaceRemit script cannot be loaded. This could be due to:', 'error');
+                addStatus('1. 🌐 Network/firewall blocking the script', 'error');
+                addStatus('2. 🚫 Ad blocker or browser security settings', 'error');
+                addStatus('3. 📡 SpaceRemit CDN issues', 'error');
+                addStatus('4. 🔐 HTTPS requirement not met', 'error');
+                addStatus('5. 🏢 Corporate firewall restrictions', 'error');
+            }
+        }, 10000);
+    </script>
 </body>
 </html>
