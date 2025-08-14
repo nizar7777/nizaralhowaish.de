@@ -106,6 +106,7 @@ exports.handler = async (event, context) => {
     const paymentData = verificationData.data;
     
     // Check payment status - accept A, B, D, E, or T (test) status tags
+    // Adding "T" for test payments as shown in the video
     const acceptableStatuses = ['A', 'B', 'D', 'E', 'T'];
     if (!acceptableStatuses.includes(paymentData.status_tag)) {
       console.error('Payment not completed:', paymentData.status, paymentData.status_tag);
@@ -119,7 +120,8 @@ exports.handler = async (event, context) => {
           success: false, 
           error: 'Payment not completed',
           status: paymentData.status,
-          status_tag: paymentData.status_tag
+          status_tag: paymentData.status_tag,
+          message: 'Acceptable status tags: A, B, D, E, T (test)'
         })
       };
     }
