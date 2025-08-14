@@ -2479,11 +2479,37 @@ blockquote {
   grid-auto-flow: row;
   place-content: space-between;
   place-items: start stretch;
-  margin-left: 8rem;
-  margin-right: 8rem;
+  margin-left: 5%;
+  margin-right: 5%;
   display: grid;
 }
+@media screen and (max-width: 479px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 
+  .heading-1 {
+    font-size: 2.9rem;
+  }
+
+  .rich-text {
+    width: 100%;
+  }
+
+  /* ... (other existing mobile styles remain the same) ... */
+
+  .flex-block-2 {
+    margin-left: 5%;
+    margin-right: 5%;
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+    grid-template-columns: 1fr;
+    width: 90%;
+  }
+
+  /* ... (rest of your existing mobile styles) ... */
+}
 @media screen and (min-width: 1440px) {
   .container {
     margin-left: auto;
@@ -2534,7 +2560,7 @@ blockquote {
   }
 
   .container.container-large {
-    width: 100%;
+    width: auto;
   }
 
   .heading-1 {
@@ -2964,11 +2990,6 @@ blockquote {
   .line-01-cell-25 {
     margin-right: -10px;
   }
-
-  .flex-block-2 {
-    margin-left: 5%;
-    margin-right: 5%;
-  }
 }
 
 @media screen and (max-width: 767px) {
@@ -3249,37 +3270,12 @@ blockquote {
     grid-template-columns: 1fr 490px min-content 1fr;
     right: -10px;
   }
-
-  .service-heading {
-    font-size: var(--heading--h6);
-  }
-
-  .serviveparagraph {
-    font-size: var(--text-size--small);
-  }
-
-  .flex-block-2 {
-    width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
-  }
 }
 
 @media screen and (max-width: 479px) {
   .container {
     padding-left: 1rem;
     padding-right: 1rem;
-  }
-
-  .container.container-large {
-    flex: 0 auto;
-    justify-content: center;
-    align-items: center;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 5%;
-    padding-right: 5%;
-    display: block;
   }
 
   .heading-1 {
@@ -3496,13 +3492,6 @@ blockquote {
     padding-bottom: 1.8rem;
   }
 
-  .navbar {
-    flex-flow: row;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-  }
-
   .button-secondary {
     align-items: center;
     width: 100%;
@@ -3671,11 +3660,6 @@ blockquote {
     padding-top: 20px;
     padding-bottom: 20px;
     display: flex;
-  }
-
-  .flex-block-2 {
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
