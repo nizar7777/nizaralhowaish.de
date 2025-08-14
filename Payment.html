@@ -1,170 +1,227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html data-wf-page="67a8e83eede1a0f937f77a08" data-wf-site="67a8e83eede1a0f937f779a1">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Payment - SpaceRemit</title>
+    <title>Payment - Nizar Al-Howaish Design Services</title>
+    <link href="css/normalize.css" rel="stylesheet" type="text/css">
+    <link href="css/webflow.css" rel="stylesheet" type="text/css">
+    <link href="css/nizaralhowaish.webflow.css" rel="stylesheet" type="text/css">
+    <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
+    <link href="images/webclip.png" rel="apple-touch-icon">
+    <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
+    
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        /* Custom Payment Styles matching your contact form */
+        .payment-section {
+            background: #000;
+            color: #fff;
+            padding: 40px 0;
         }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        .payment-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .payment-tag-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 1.1em;
-        }
-
-        .form-container {
-            padding: 30px;
-        }
-
-        .service-selection {
+            gap: 20px;
             margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 2px solid #e9ecef;
         }
 
-        .service-selection h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.3em;
+        .payment-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .hours-input {
+        .payment-heading {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px 0;
+            line-height: 1.2;
+        }
+
+        .payment-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 40px;
+        }
+
+        /* Hours Selection Styling */
+        .hours-selection-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hours-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .hours-rate-info {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .hours-input-container {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .hours-input label {
-            font-weight: bold;
-            color: #34495e;
-            min-width: 60px;
-        }
-
-        .hours-input input {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        .hours-input input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .price-display {
-            background: #e8f5e8;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #28a745;
-        }
-
-        .price-display .price {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #28a745;
-        }
-
-        .customer-info {
-            margin-bottom: 30px;
-        }
-
-        .customer-info h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .form-group {
+            gap: 20px;
             margin-bottom: 20px;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #34495e;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
+        .hours-input-field {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
+            padding: 15px 20px;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 500;
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus {
+        .hours-input-field:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
         }
 
-        .form-group textarea {
-            resize: vertical;
-            height: 80px;
+        .hours-input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        /* SpaceRemit Form Styles */
-        #spaceremit-form {
-            width: 100% !important;
-            padding: 0 !important;
+        .price-display-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            min-width: 160px;
+        }
+
+        .price-amount-display {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .price-label-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .quick-hours-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quick-hour-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .quick-hour-button:hover,
+        .quick-hour-button.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Form Styling - matching your contact form exactly */
+        .payment-form-wrapper {
+            opacity: 1;
+        }
+
+        .payment-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-content {
+            margin-bottom: 30px;
+        }
+
+        .form-section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .name-wrapper-contact {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .text-size-medium-vw {
+            color: #fff;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .text-field-contact {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px 20px;
+            color: #fff;
+            font-size: 1rem;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .text-field-contact:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .text-field-contact::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* SpaceRemit Payment Method Styling */
+        .payment-method-section {
+            margin-top: 30px;
         }
 
         .sp-one-type-select {
-            margin-bottom: 20px;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            margin-bottom: 15px;
             overflow: hidden;
             transition: all 0.3s ease;
         }
 
         .sp-one-type-select:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
         .sp-one-type-select input[type="radio"] {
@@ -174,96 +231,133 @@
         .sp-one-type-select label {
             display: block;
             padding: 20px;
+            background: transparent;
             cursor: pointer;
-            background: #f8f9fa;
             transition: all 0.3s ease;
-            border-bottom: 2px solid #e9ecef;
+            font-weight: 500;
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sp-one-type-select input[type="radio"]:checked + label {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
         }
 
-        .sp-one-type-select label div {
-            font-weight: bold;
-            font-size: 1.1em;
-            display: flex;
-            align-items: center;
-        }
-
-        .sp-one-type-select label div:before {
-            content: "💳";
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
-
-        .sp-one-type-select:first-child label div:before {
-            content: "🏦";
+        .sp-one-type-select label:hover {
+            background: rgba(255, 255, 255, 0.05);
         }
 
         #spaceremit-local-methods-pay,
         #spaceremit-card-pay {
             padding: 20px;
-            background: white;
-        }
-
-        .submit-container {
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .pay-button {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2em;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .pay-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
-        }
-
-        .pay-button:active {
-            transform: translateY(0);
-        }
-
-        .pay-button:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .loading {
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: none;
-            text-align: center;
-            padding: 20px;
-            color: #667eea;
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .loading.show {
+        .sp-one-type-select input[type="radio"]:checked ~ div {
             display: block;
         }
 
-        .spinner {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+        /* Submit Button - matching your contact form button */
+        .contact-button {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .button-primary {
+            background: #fff;
+            color: #000;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button {
+            background: transparent;
+            border: none;
+            color: inherit;
+            font: inherit;
+            cursor: pointer;
+            width: 100%;
+            padding: 0;
+        }
+
+        .button-primary:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .button-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Messages */
+        .success-message, .error-message {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .security-notice {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #22c55e;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-right: 10px;
         }
 
         @keyframes spin {
@@ -271,288 +365,435 @@
             100% { transform: rotate(360deg); }
         }
 
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #f5c6cb;
-        }
-
-        .success {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #c3e6cb;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .hours-input {
+            .payment-heading {
+                font-size: 2rem;
+            }
+
+            .name-wrapper-contact {
+                grid-template-columns: 1fr;
+            }
+
+            .hours-input-container {
                 flex-direction: column;
                 align-items: stretch;
             }
 
-            .hours-input label {
-                min-width: auto;
+            .quick-hours-buttons {
+                justify-content: center;
             }
 
-            .header h1 {
-                font-size: 1.5em;
-            }
-
-            .form-container {
-                padding: 20px;
+            .container {
+                padding-left: 20px;
+                padding-right: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>💼 Service Payment</h1>
-            <p>Secure payment powered by SpaceRemit</p>
-        </div>
-
-        <div class="form-container">
-            <div id="message-container"></div>
-
-            <!-- Service Selection -->
-            <div class="service-selection">
-                <h3>📊 Service Details</h3>
-                <div class="hours-input">
-                    <label for="hours">Hours:</label>
-                    <input type="number" id="hours" min="1" max="100" value="1" required>
-                </div>
-                <div class="price-display">
-                    <div>Rate: <strong>$10.00 per hour</strong></div>
-                    <div class="price">Total: $<span id="total-price">10.00</span></div>
-                </div>
-            </div>
-
-            <!-- Customer Information -->
-            <div class="customer-info">
-                <h3>👤 Customer Information</h3>
-                <div class="form-group">
-                    <label for="fullname">Full Name *</label>
-                    <input type="text" id="fullname" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number *</label>
-                    <input type="tel" id="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="notes">Additional Notes (Optional)</label>
-                    <textarea id="notes" placeholder="Any special requirements or notes..."></textarea>
+    <!-- Navigation (same as your contact page) -->
+    <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar w-nav">
+        <div class="container container-large w-container">
+            <div id="" class="navbar-component">
+                <a href="index.html" data-w-id="d8e2ae47-09ad-6537-c42f-a75c2c7b427c" class="brand w-nav-brand">
+                    <img sizes="(max-width: 479px) 98vw, (max-width: 697px) 99vw, 691px" 
+                         srcset="images/Artboard-2-p-500.png 500w, images/Artboard-2.png 691w" 
+                         alt="" src="images/Artboard-2.png" loading="lazy" class="image-9">
+                </a>
+                <div class="nav-menu-wrap">
+                    <div class="right-navbar-content">
+                        <a href="works.html" class="link-block-navbar w-inline-block">
+                            <div>Portfolio</div>
+                        </a>
+                        <a href="contact.html" class="link-block-navbar w-inline-block">
+                            <div>Book a service</div>
+                        </a>
+                        <a href="/contact#contact" class="link-block-navbar w-inline-block">
+                            <div>Let's Chat</div>
+                        </a>
+                    </div>
                 </div>
             </div>
-
-            <!-- Loading Indicator -->
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                Processing payment...
-            </div>
-
-            <!-- SpaceRemit Payment Form -->
-            <form id="spaceremit-form">
-                <!-- Hidden input fields for amount and currency -->
-                <input type="hidden" name="amount" value="10">
-                <input type="hidden" name="currency" value="USD">
-                
-                <!-- Hidden input fields for buyer information -->
-                <input type="hidden" name="fullname" value="">
-                <input type="hidden" name="email" value="">
-                <input type="hidden" name="phone" value="">
-                <input type="hidden" name="notes" value="">
-
-                <!-- Container for local payment methods -->
-                <div class="sp-one-type-select">
-                    <input type="radio" name="sp-pay-type-radio" value="local-methods-pay" id="sp_local_methods_radio" checked>
-                    <label for="sp_local_methods_radio">
-                        <div>Local payment methods</div>
-                    </label>
-                    <div id="spaceremit-local-methods-pay"></div>
-                </div>
-
-                <!-- Container for card payment -->
-                <div class="sp-one-type-select">
-                    <input type="radio" name="sp-pay-type-radio" value="card-pay" id="sp_card_radio">
-                    <label for="sp_card_radio">
-                        <div>Card payment</div>
-                    </label>
-                    <div id="spaceremit-card-pay"></div>
-                </div>
-
-                <!-- Submit button -->
-                <div class="submit-container">
-                    <button type="submit" class="pay-button" id="pay-button">
-                        🔒 Pay Securely Now
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
 
-    <!-- SpaceRemit JavaScript Library -->
-    <script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
+    <!-- Payment Section -->
+    <section class="payment-section">
+        <div class="w-layout-blockcontainer container w-container">
+            
+            <!-- Header -->
+            <div class="payment-header">
+                <div class="payment-tag-wrapper">
+                    <div class="elipse hide-mobile"></div>
+                    <div class="payment-tag">
+                        <p class="text-weight-medium caps">SECURE PAYMENT</p>
+                    </div>
+                    <div class="elipse hide-mobile"></div>
+                </div>
+                <h1 class="payment-heading">Hourly Rate Payment</h1>
+                <p class="payment-subtitle">Professional design services at competitive hourly rates</p>
+            </div>
 
+            <!-- Hours Selection -->
+            <div class="hours-selection-wrapper">
+                <h3 class="hours-title">How many hours do you need?</h3>
+                <p class="hours-rate-info">Rate: $10 USD per hour • Decimal hours supported (e.g., 1.5, 2.5)</p>
+                
+                <div class="hours-input-container">
+                    <input type="number" 
+                           id="hours-input" 
+                           class="hours-input-field" 
+                           placeholder="Enter hours (e.g., 1.5)" 
+                           min="0.1" 
+                           max="100" 
+                           step="0.1"
+                           value="1">
+                    
+                    <div class="price-display-box">
+                        <div class="price-amount-display" id="total-price">$10.00</div>
+                        <div class="price-label-text">Total Amount</div>
+                    </div>
+                </div>
+
+                <div class="quick-hours-buttons">
+                    <button type="button" class="quick-hour-button" data-hours="0.5">30 min</button>
+                    <button type="button" class="quick-hour-button active" data-hours="1">1 Hour</button>
+                    <button type="button" class="quick-hour-button" data-hours="1.5">1.5 Hours</button>
+                    <button type="button" class="quick-hour-button" data-hours="2">2 Hours</button>
+                    <button type="button" class="quick-hour-button" data-hours="2.5">2.5 Hours</button>
+                    <button type="button" class="quick-hour-button" data-hours="5">5 Hours</button>
+                    <button type="button" class="quick-hour-button" data-hours="10">10 Hours</button>
+                </div>
+            </div>
+
+            <!-- Payment Form -->
+            <div class="payment-form-wrapper w-form">
+                <form id="spaceremit-form" class="payment-form">
+                    <!-- Hidden fields for SpaceRemit -->
+                    <input type="hidden" name="amount" value="10.00" id="payment-amount">
+                    <input type="hidden" name="currency" value="USD">
+                    <input type="hidden" name="fullname" value="" id="payment-fullname">
+                    <input type="hidden" name="email" value="" id="payment-email">
+                    <input type="hidden" name="phone" value="" id="payment-phone">
+                    <input type="hidden" name="notes" value="" id="payment-notes">
+
+                    <div class="form-content">
+                        <!-- Customer Information -->
+                        <h4 class="form-section-title">Customer Information</h4>
+                        
+                        <div class="name-wrapper-contact">
+                            <div>
+                                <label for="customer-name" class="text-size-medium-vw">Name</label>
+                                <input class="text-field-contact w-input" 
+                                       maxlength="256" 
+                                       name="customer-name" 
+                                       placeholder="Enter your name" 
+                                       type="text" 
+                                       id="customer-name" 
+                                       required="">
+                            </div>
+                            <div>
+                                <label for="customer-email" class="text-size-medium-vw">E-mail</label>
+                                <input class="text-field-contact w-input" 
+                                       maxlength="256" 
+                                       name="customer-email" 
+                                       placeholder="Enter your e-mail" 
+                                       type="email" 
+                                       id="customer-email" 
+                                       required="">
+                            </div>
+                        </div>
+
+                        <div class="name-wrapper-contact">
+                            <div>
+                                <label for="customer-phone" class="text-size-medium-vw">Phone Number</label>
+                                <input class="text-field-contact w-input" 
+                                       maxlength="256" 
+                                       name="customer-phone" 
+                                       placeholder="Enter your phone" 
+                                       type="tel" 
+                                       id="customer-phone">
+                            </div>
+                            <div>
+                                <label for="customer-company" class="text-size-medium-vw">Company (Optional)</label>
+                                <input class="text-field-contact w-input" 
+                                       maxlength="256" 
+                                       name="customer-company" 
+                                       placeholder="Enter your company" 
+                                       type="text" 
+                                       id="customer-company">
+                            </div>
+                        </div>
+
+                        <label for="project-details" class="text-size-medium-vw">Project Details</label>
+                        <textarea id="project-details" 
+                                  name="project-details" 
+                                  maxlength="5000" 
+                                  placeholder="Tell us about your project requirements..." 
+                                  class="text-field-contact w-input"></textarea>
+
+                        <!-- Payment Method Selection -->
+                        <div class="payment-method-section">
+                            <h4 class="form-section-title">Payment Method</h4>
+                            
+                            <!-- Local Payment Methods -->
+                            <div class="sp-one-type-select">
+                                <input type="radio" name="sp-pay-type-radio" value="local-methods-pay" id="sp_local_methods_radio" checked>
+                                <label for="sp_local_methods_radio">
+                                    💳 Local Payment Methods
+                                </label>
+                                <div id="spaceremit-local-methods-pay">
+                                    Local payment options will be loaded here based on your location.
+                                </div>
+                            </div>
+
+                            <!-- Card Payment -->
+                            <div class="sp-one-type-select">
+                                <input type="radio" name="sp-pay-type-radio" value="card-pay" id="sp_card_radio">
+                                <label for="sp_card_radio">
+                                    💳 Credit/Debit Card
+                                </label>
+                                <div id="spaceremit-card-pay">
+                                    Secure card payment processing via SpaceRemit.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="contact-button">
+                        <div class="button-primary">
+                            <input type="submit" 
+                                   data-wait="Please wait..." 
+                                   class="submit-button w-button" 
+                                   value="Process Payment"
+                                   id="submit-btn">
+                            <div class="text-weight-medium caps">Process Payment</div>
+                        </div>
+                    </div>
+
+                    <!-- Security Notice -->
+                    <div class="security-notice">
+                        🔒 Your payment information is secured with industry-standard encryption
+                    </div>
+
+                    <!-- Status Messages -->
+                    <div id="success-message" class="success-message"></div>
+                    <div id="error-message" class="error-message"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- SpaceRemit Configuration Script -->
     <script>
-        // SpaceRemit Configuration
-        const SP_PUBLIC_KEY = "test_pk4YTFRP4VMMFMIG3VFTNCNRWF9IEAQG5OIFG5X1D65VX69K201K"; // Test public key
+        // SpaceRemit Configuration - Using your TEST keys
+        const SP_PUBLIC_KEY = "test_pk4YTFRP4VMMFMIG3VFTNCNRWF9IEAQG5OIFG5X1D65VX69K201K";
         const SP_FORM_ID = "#spaceremit-form";
         const SP_SELECT_RADIO_NAME = "sp-pay-type-radio";
         const LOCAL_METHODS_BOX_STATUS = true;
         const LOCAL_METHODS_PARENT_ID = "#spaceremit-local-methods-pay";
         const CARD_BOX_STATUS = true;
         const CARD_BOX_PARENT_ID = "#spaceremit-card-pay";
-        let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = true;
+        let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = false;
 
-        // DOM Elements
-        const hoursInput = document.getElementById('hours');
-        const totalPriceElement = document.getElementById('total-price');
-        const fullnameInput = document.getElementById('fullname');
-        const emailInput = document.getElementById('email');
-        const phoneInput = document.getElementById('phone');
-        const notesInput = document.getElementById('notes');
-        const payButton = document.getElementById('pay-button');
-        const loadingElement = document.getElementById('loading');
-        const messageContainer = document.getElementById('message-container');
-        const spaceremitForm = document.getElementById('spaceremit-form');
-
-        // Price calculation
-        const HOURLY_RATE = 10.00;
-
-        function updatePrice() {
-            const hours = parseInt(hoursInput.value) || 1;
-            const total = (hours * HOURLY_RATE).toFixed(2);
-            totalPriceElement.textContent = total;
-            
-            // Update hidden form field
-            spaceremitForm.querySelector('input[name="amount"]').value = total;
+        // Callback function for successful payment
+        function SP_SUCCESSFUL_PAYMENT(spaceremit_code) {
+            console.log('Payment successful:', spaceremit_code);
+            document.getElementById('loading-overlay').style.display = 'none';
+            verifyPayment(spaceremit_code);
         }
 
-        function updateFormData() {
-            // Update hidden form fields with customer information
-            spaceremitForm.querySelector('input[name="fullname"]').value = fullnameInput.value;
-            spaceremitForm.querySelector('input[name="email"]').value = emailInput.value;
-            spaceremitForm.querySelector('input[name="phone"]').value = phoneInput.value;
-            spaceremitForm.querySelector('input[name="notes"]').value = `Hours: ${hoursInput.value} | Notes: ${notesInput.value}`;
+        // Callback function for failed payment
+        function SP_FAILD_PAYMENT() {
+            console.log('Payment failed');
+            document.getElementById('loading-overlay').style.display = 'none';
+            showMessage('Payment failed. Please try again.', 'error');
         }
 
-        function showMessage(message, type = 'error') {
-            messageContainer.innerHTML = `<div class="${type}">${message}</div>`;
-            messageContainer.scrollIntoView({ behavior: 'smooth' });
+        // Callback function for receiving message
+        function SP_RECIVED_MESSAGE(message) {
+            console.log('SpaceRemit message:', message);
+            showMessage(message, 'info');
         }
 
-        function validateForm() {
-            if (!fullnameInput.value.trim()) {
-                showMessage('Please enter your full name.');
-                fullnameInput.focus();
-                return false;
-            }
-
-            if (!emailInput.value.trim()) {
-                showMessage('Please enter your email address.');
-                emailInput.focus();
-                return false;
-            }
-
-            if (!phoneInput.value.trim()) {
-                showMessage('Please enter your phone number.');
-                phoneInput.focus();
-                return false;
-            }
-
-            const hours = parseInt(hoursInput.value);
-            if (!hours || hours < 1 || hours > 100) {
-                showMessage('Please enter a valid number of hours (1-100).');
-                hoursInput.focus();
-                return false;
-            }
-
-            return true;
+        // Callback function for needing authentication
+        function SP_NEED_AUTH(target_auth_link) {
+            console.log('Authentication needed:', target_auth_link);
+            window.open(target_auth_link, '_blank');
         }
 
-        // Event listeners
-        hoursInput.addEventListener('input', updatePrice);
+        // Custom JavaScript for form handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hours calculation
+            const hoursInput = document.getElementById('hours-input');
+            const totalPriceDisplay = document.getElementById('total-price');
+            const paymentAmountField = document.getElementById('payment-amount');
+            const quickHourBtns = document.querySelectorAll('.quick-hour-button');
 
-        spaceremitForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            if (!validateForm()) {
-                return;
+            function updatePrice() {
+                const hours = parseFloat(hoursInput.value) || 0.1;
+                const total = hours * 10; // $10 per hour
+                totalPriceDisplay.textContent = `$${total.toFixed(2)}`;
+                paymentAmountField.value = total.toFixed(2);
+                
+                // Update notes
+                const hoursText = hours === 1 ? 'hour' : 'hours';
+                const hoursDisplay = hours % 1 === 0 ? hours.toString() : hours.toString();
+                document.getElementById('payment-notes').value = `Design services: ${hoursDisplay} ${hoursText} at $10/hour`;
             }
 
-            updateFormData();
-            showLoading(true);
-            
-            // Clear any previous messages
-            messageContainer.innerHTML = '';
+            hoursInput.addEventListener('input', updatePrice);
 
-            // Allow the form to submit normally after validation
-            setTimeout(() => {
-                spaceremitForm.submit();
-            }, 100);
+            // Quick hour buttons
+            quickHourBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const hours = this.dataset.hours;
+                    hoursInput.value = hours;
+                    
+                    // Update active state
+                    quickHourBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    updatePrice();
+                });
+            });
+
+            // Form field synchronization
+            const customerName = document.getElementById('customer-name');
+            const customerEmail = document.getElementById('customer-email');
+            const customerPhone = document.getElementById('customer-phone');
+            const projectDetails = document.getElementById('project-details');
+            const customerCompany = document.getElementById('customer-company');
+
+            // Sync customer info to hidden fields
+            function syncCustomerInfo() {
+                document.getElementById('payment-fullname').value = customerName.value;
+                document.getElementById('payment-email').value = customerEmail.value;
+                document.getElementById('payment-phone').value = customerPhone.value;
+                
+                // Update notes with project details and company info
+                let notes = document.getElementById('payment-notes').value;
+                if (projectDetails.value) {
+                    notes += ` | Project: ${projectDetails.value}`;
+                }
+                if (customerCompany.value) {
+                    notes += ` | Company: ${customerCompany.value}`;
+                }
+                document.getElementById('payment-notes').value = notes;
+            }
+
+            customerName.addEventListener('input', syncCustomerInfo);
+            customerEmail.addEventListener('input', syncCustomerInfo);
+            customerPhone.addEventListener('input', syncCustomerInfo);
+            projectDetails.addEventListener('input', syncCustomerInfo);
+            customerCompany.addEventListener('input', syncCustomerInfo);
+
+            // Form submission handling
+            document.getElementById('spaceremit-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate required fields
+                if (!customerName.value || !customerEmail.value) {
+                    showMessage('Please fill in all required fields.', 'error');
+                    return;
+                }
+
+                // Validate hours
+                const hours = parseFloat(hoursInput.value);
+                if (!hours || hours < 0.1) {
+                    showMessage('Please enter a valid number of hours (minimum 0.1 hours).', 'error');
+                    return;
+                }
+
+                // Sync customer info one more time
+                syncCustomerInfo();
+                updatePrice();
+
+                // Show loading
+                document.getElementById('loading-overlay').style.display = 'flex';
+                document.getElementById('submit-btn').disabled = true;
+
+                // The form will be processed by SpaceRemit's JavaScript
+            });
+
+            // Initialize price
+            updatePrice();
         });
 
-        function showLoading(show) {
-            if (show) {
-                loadingElement.classList.add('show');
-                payButton.disabled = true;
-                payButton.textContent = 'Processing...';
-            } else {
-                loadingElement.classList.remove('show');
-                payButton.disabled = false;
-                payButton.textContent = '🔒 Pay Securely Now';
-            }
-        }
-
-        // SpaceRemit Callback Functions
-        function SP_SUCCESSFUL_PAYMENT(spaceremit_code) {
-            showLoading(false);
-            showMessage(`✅ Payment successful! Transaction ID: ${spaceremit_code}. You will be redirected shortly.`, 'success');
+        // Utility functions
+        function showMessage(message, type) {
+            const successDiv = document.getElementById('success-message');
+            const errorDiv = document.getElementById('error-message');
             
-            // Optionally redirect to a success page
-            setTimeout(() => {
-                window.location.href = '/success.html?transaction=' + spaceremit_code;
-            }, 3000);
-        }
-
-        function SP_FAILD_PAYMENT() {
-            showLoading(false);
-            showMessage('❌ Payment failed. Please try again or contact support if the issue persists.');
-        }
-
-        function SP_RECIVED_MESSAGE(message) {
-            showLoading(false);
-            showMessage(`ℹ️ ${message}`);
-        }
-
-        function SP_NEED_AUTH(target_auth_link) {
-            showLoading(false);
-            showMessage('🔐 Additional authentication required. Please complete the verification process.');
-            // Optionally open the auth link
-            if (target_auth_link) {
-                window.open(target_auth_link, '_blank');
+            // Hide both first
+            successDiv.style.display = 'none';
+            errorDiv.style.display = 'none';
+            
+            // Show appropriate message
+            if (type === 'error') {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            } else {
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
             }
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+                errorDiv.style.display = 'none';
+            }, 5000);
         }
 
-        // Initialize
-        updatePrice();
-        
-        // Auto-fill demo data (remove in production)
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            fullnameInput.value = 'John Doe';
-            emailInput.value = 'john@example.com';
-            phoneInput.value = '+1234567890';
-            notesInput.value = 'Test payment';
+        // Server-side payment verification
+        async function verifyPayment(paymentCode) {
+            try {
+                const response = await fetch('/.netlify/functions/verify-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        payment_id: paymentCode,
+                        customer_email: document.getElementById('customer-email').value,
+                        hours: parseFloat(document.getElementById('hours-input').value),
+                        project_details: document.getElementById('project-details').value
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('Payment verified successfully! Redirecting...', 'success');
+                    
+                    // Redirect to success page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = `/payment-success.html?payment_id=${paymentCode}&amount=${result.payment.amount}`;
+                    }, 2000);
+                } else {
+                    showMessage('Payment verification failed. Please contact support.', 'error');
+                    document.getElementById('submit-btn').disabled = false;
+                }
+            } catch (error) {
+                console.error('Payment verification error:', error);
+                showMessage('Payment verification error. Please contact support.', 'error');
+                document.getElementById('submit-btn').disabled = false;
+            }
         }
     </script>
+
+    <!-- Include your existing scripts -->
+    <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=67a8e83eede1a0f937f779a1" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="js/webflow.js" type="text/javascript"></script>
+    
+    <!-- SpaceRemit JavaScript Library -->
+    <script src="https://spaceremit.com/api/v2/js_script/spaceremit.js"></script>
 </body>
 </html>
