@@ -22,6 +22,38 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all "Let's Discuss" buttons
+  const discussButtons = document.querySelectorAll('.discussbutton');
+  
+  // Add click event listener to each button
+  discussButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault(); // Prevent default link behavior
+      
+      // Find the service heading in the same parent container
+      const serviceContainer = this.closest('.div-block-4');
+      const serviceHeading = serviceContainer.querySelector('.service-heading');
+      const serviceName = serviceHeading.textContent.trim();
+      
+      // Fill the service input field
+      const serviceInput = document.getElementById('service');
+      if (serviceInput) {
+        serviceInput.value = serviceName;
+      }
+      
+      // Scroll to the contact form
+      const contactForm = document.getElementById('contact');
+      if (contactForm) {
+        contactForm.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+});
+</script>
+  
   <section class="hero-form">
     <div class="w-layout-blockcontainer container w-container">
       <div class="hero-header">
