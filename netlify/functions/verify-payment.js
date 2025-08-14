@@ -1,46 +1,72 @@
-import type { Context, Config } from "@netlify/functions";
+// netlify/functions/verify-payment.js
+// Server-side payment verification for SpaceRemit API
 
-export default async (req: Request, context: Context) => {
+exports.handler = async (event, context) => {
   // Only allow POST requests
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
       headers: {
         'Content-Type': 'application/json',
-      }
-    });
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+      },
+      body: JSON.stringify({ error: 'Method not allowed' })
+    };
+  }
+
+  // Handle CORS preflight
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+      },
+      body: ''
+    };
   }
 
   try {
     // Parse request body
-    const body = await req.json();
+    const body = JSON.parse(event.body);
     const { payment_id, customer_email, hours, project_details } = body;
 
     // Validate required fields
     if (!payment_id) {
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: 'Payment ID is required' 
-      }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return {
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify({ 
+          success: false, 
+          error: 'Payment ID is required' 
+        })
+      };
     }
 
     // Get SpaceRemit private key from environment variables
-    const SPACEREMIT_PRIVATE_KEY = Netlify.env.get('SPACEREMIT_PRIVATE_KEY') || 
-                                   Netlify.env.get('SPACEREMIT_TEST_PRIVATE_KEY') ||
+    const SPACEREMIT_PRIVATE_KEY = process.env.SPACEREMIT_PRIVATE_KEY || 
+                                   process.env.SPACEREMIT_TEST_PRIVATE_KEY ||
                                    'test_skCZYMU2ZJL58A7E011B0VJY7I5GXLV0KP4DPRMUVTWX5QQGSW10';
     
     if (!SPACEREMIT_PRIVATE_KEY) {
       console.error('SpaceRemit private key not configured');
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: 'Payment verification service not configured' 
-      }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return {
+        statusCode: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify({ 
+          success: false, 
+          error: 'Payment verification service not configured' 
+        })
+      };
     }
 
     console.log('Verifying payment:', payment_id);
@@ -64,14 +90,18 @@ export default async (req: Request, context: Context) => {
     // Check if verification was successful
     if (verificationData.response_status !== 'success') {
       console.error('Payment verification failed:', verificationData);
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: 'Payment verification failed',
-        message: verificationData.message || 'Unknown error'
-      }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return {
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify({ 
+          success: false, 
+          error: 'Payment verification failed',
+          message: verificationData.message || 'Unknown error'
+        })
+      };
     }
 
     const paymentData = verificationData.data;
@@ -80,15 +110,19 @@ export default async (req: Request, context: Context) => {
     const acceptableStatuses = ['A', 'B', 'D', 'E', 'T'];
     if (!acceptableStatuses.includes(paymentData.status_tag)) {
       console.error('Payment not completed:', paymentData.status, paymentData.status_tag);
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: 'Payment not completed',
-        status: paymentData.status,
-        status_tag: paymentData.status_tag
-      }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return {
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify({ 
+          success: false, 
+          error: 'Payment not completed',
+          status: paymentData.status,
+          status_tag: paymentData.status_tag
+        })
+      };
     }
 
     // Log successful payment for record keeping
@@ -112,54 +146,57 @@ export default async (req: Request, context: Context) => {
     }
 
     // Return success response
-    return new Response(JSON.stringify({ 
-      success: true,
-      payment: {
-        id: paymentData.id,
-        amount: paymentData.total_amount,
-        currency: paymentData.currency,
-        status: paymentData.status,
-        date: paymentData.date,
-        seller_received_amount: paymentData.seller_received_amount
-      }
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({ 
+        success: true,
+        payment: {
+          id: paymentData.id,
+          amount: paymentData.total_amount,
+          currency: paymentData.currency,
+          status: paymentData.status,
+          date: paymentData.date,
+          seller_received_amount: paymentData.seller_received_amount
+        }
+      })
+    };
 
   } catch (error) {
     console.error('Payment verification error:', error);
     
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: 'Internal server error during payment verification',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return {
+      statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({ 
+        success: false, 
+        error: 'Internal server error during payment verification',
+        details: error.message || 'Unknown error'
+      })
+    };
   }
 };
 
 // Optional: Function to send confirmation email
-async function sendConfirmationEmail(
-  customerEmail: string, 
-  paymentData: any, 
-  hours: number, 
-  projectDetails: string
-) {
+async function sendConfirmationEmail(customerEmail, paymentData, hours, projectDetails) {
   // For now, just log that we would send an email
   // You can integrate with SendGrid, Mailgun, or other email services later
   console.log(`Would send confirmation email to ${customerEmail}:`);
   console.log(`- Payment ID: ${paymentData.id}`);
-  console.log(`- Amount: ${paymentData.total_amount} ${paymentData.currency}`);
+  console.log(`- Amount: $${paymentData.total_amount} ${paymentData.currency}`);
   console.log(`- Hours: ${hours}`);
   console.log(`- Project: ${projectDetails}`);
   console.log(`- Status: ${paymentData.status}`);
   
   // Example email integration with SendGrid (uncomment to use):
   /*
-  const SENDGRID_API_KEY = Netlify.env.get('SENDGRID_API_KEY');
+  const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
   if (SENDGRID_API_KEY) {
     try {
       const emailResponse = await fetch('https://api.sendgrid.com/v3/mail/send', {
@@ -188,7 +225,7 @@ async function sendConfirmationEmail(
                   <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
                     <h3>Order Details:</h3>
                     <p><strong>Service:</strong> Design Services (${hours} hour${hours > 1 ? 's' : ''})</p>
-                    <p><strong>Amount:</strong> ${paymentData.total_amount} ${paymentData.currency}</p>
+                    <p><strong>Amount:</strong> $${paymentData.total_amount} ${paymentData.currency}</p>
                     <p><strong>Payment ID:</strong> ${paymentData.id}</p>
                     <p><strong>Date:</strong> ${paymentData.date}</p>
                     <p><strong>Status:</strong> ${paymentData.status}</p>
@@ -219,7 +256,3 @@ async function sendConfirmationEmail(
   }
   */
 }
-
-export const config: Config = {
-  path: "/verify-payment"
-};
