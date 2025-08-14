@@ -2,7 +2,6 @@
 <html data-wf-page="67a8e83eede1a0f937f77a08" data-wf-site="67a8e83eede1a0f937f779a1">
 <head>
     <meta charset="UTF-8">
-<meta name="spaceremit-site-verification" content="UNIQUE_VERIFICATION_CODE" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment - Nizar Al-Howaish Design Services</title>
     <link href="css/normalize.css" rel="stylesheet" type="text/css">
@@ -621,40 +620,81 @@
         const LOCAL_METHODS_PARENT_ID = "#spaceremit-local-methods-pay";
         const CARD_BOX_STATUS = true;
         const CARD_BOX_PARENT_ID = "#spaceremit-card-pay";
-        let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = true; // FIXED: Set to true as per documentation
+        let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = true;
+
+        // Debug logging
+        console.log('SpaceRemit Config Loaded:');
+        console.log('Public Key:', SP_PUBLIC_KEY);
+        console.log('Form ID:', SP_FORM_ID);
+        console.log('Local Methods Status:', LOCAL_METHODS_BOX_STATUS);
+        console.log('Card Status:', CARD_BOX_STATUS);
 
         // Callback function for successful payment
         function SP_SUCCESSFUL_PAYMENT(spaceremit_code) {
-            console.log('Payment successful:', spaceremit_code);
+            console.log('✅ Payment successful:', spaceremit_code);
             document.getElementById('loading-overlay').style.display = 'none';
             verifyPayment(spaceremit_code);
         }
 
         // Callback function for failed payment
         function SP_FAILD_PAYMENT() {
-            console.log('Payment failed');
+            console.log('❌ Payment failed');
             document.getElementById('loading-overlay').style.display = 'none';
             showMessage('Payment failed. Please try again.', 'error');
         }
 
-        // Callback function for receiving message - Following documentation exactly
+        // Callback function for receiving message
         function SP_RECIVED_MESSAGE(message) {
-            console.log('SpaceRemit message:', message);
-            alert(message); // As per documentation default behavior
+            console.log('📨 SpaceRemit message:', message);
+            alert(message);
             
             // If payment method is disabled, show specific help
             if (message.toLowerCase().includes('disabled')) {
-                showMessage('Payment method temporarily disabled. Please try the other payment option or contact support.', 'error');
+                showMessage('Payment method temporarily disabled. Please contact SpaceRemit support or try the other payment option.', 'error');
             }
         }
 
         // Callback function for needing authentication
         function SP_NEED_AUTH(target_auth_link) {
-            console.log('Authentication needed:', target_auth_link);
+            console.log('🔐 Authentication needed:', target_auth_link);
             window.open(target_auth_link, '_blank');
         }
 
-        // Custom JavaScript for form handling
+        // Check if SpaceRemit script loaded
+        window.addEventListener('load', function() {
+            console.log('🔍 Checking SpaceRemit integration...');
+            
+            // Check if form exists
+            const form = document.querySelector(SP_FORM_ID);
+            console.log('Form found:', !!form);
+            
+            // Check if containers exist
+            const localContainer = document.querySelector(LOCAL_METHODS_PARENT_ID);
+            const cardContainer = document.querySelector(CARD_BOX_PARENT_ID);
+            console.log('Local methods container:', !!localContainer);
+            console.log('Card container:', !!cardContainer);
+            
+            // Check if SpaceRemit script loaded
+            console.log('SpaceRemit script loaded:', typeof window.spaceremit !== 'undefined');
+            
+            // Add debug info to page
+            setTimeout(() => {
+                const debugInfo = document.createElement('div');
+                debugInfo.innerHTML = `
+                    <div style="background: rgba(255,255,255,0.1); padding: 10px; margin: 10px 0; border-radius: 5px; font-size: 12px; color: #fff;">
+                        <strong>Debug Info:</strong><br>
+                        Public Key: ${SP_PUBLIC_KEY}<br>
+                        Form Found: ${!!form}<br>
+                        Local Container: ${!!localContainer}<br>
+                        Card Container: ${!!cardContainer}<br>
+                        Script Status: ${typeof window.spaceremit !== 'undefined' ? 'Loaded' : 'Not Loaded'}
+                    </div>
+                `;
+                document.querySelector('.payment-form-wrapper').appendChild(debugInfo);
+            }, 2000);
+        });
+
+        // Enhanced form handling
         document.addEventListener('DOMContentLoaded', function() {
             // Hours calculation
             const hoursInput = document.getElementById('hours-input');
