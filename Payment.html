@@ -469,8 +469,15 @@
 
             <!-- Payment Form -->
             <div class="payment-form-wrapper w-form">
-                <!-- Customer Info Form (sends to Formspree) -->
-                <form action="https://formspree.io/f/xkgbrbyz" method="POST" id="customer-info-form" class="payment-form" style="margin-bottom: 30px;">
+                <form id="spaceremit-form" class="payment-form">
+                    <!-- Hidden fields for SpaceRemit -->
+                    <input type="hidden" name="amount" value="10.00" id="payment-amount">
+                    <input type="hidden" name="currency" value="USD">
+                    <input type="hidden" name="fullname" value="" id="payment-fullname">
+                    <input type="hidden" name="email" value="" id="payment-email">
+                    <input type="hidden" name="phone" value="" id="payment-phone">
+                    <input type="hidden" name="notes" value="" id="payment-notes">
+
                     <div class="form-content">
                         <!-- Customer Information -->
                         <h4 class="form-section-title">Customer Information</h4>
@@ -480,7 +487,7 @@
                                 <label for="customer-name" class="text-size-medium-vw">Name</label>
                                 <input class="text-field-contact w-input" 
                                        maxlength="256" 
-                                       name="name" 
+                                       name="customer-name" 
                                        placeholder="Enter your name" 
                                        type="text" 
                                        id="customer-name" 
@@ -490,7 +497,7 @@
                                 <label for="customer-email" class="text-size-medium-vw">E-mail</label>
                                 <input class="text-field-contact w-input" 
                                        maxlength="256" 
-                                       name="email" 
+                                       name="customer-email" 
                                        placeholder="Enter your e-mail" 
                                        type="email" 
                                        id="customer-email" 
@@ -503,7 +510,7 @@
                                 <label for="customer-phone" class="text-size-medium-vw">Phone Number</label>
                                 <input class="text-field-contact w-input" 
                                        maxlength="256" 
-                                       name="phone" 
+                                       name="customer-phone" 
                                        placeholder="Enter your phone" 
                                        type="tel" 
                                        id="customer-phone">
@@ -512,7 +519,7 @@
                                 <label for="customer-company" class="text-size-medium-vw">Company (Optional)</label>
                                 <input class="text-field-contact w-input" 
                                        maxlength="256" 
-                                       name="company" 
+                                       name="customer-company" 
                                        placeholder="Enter your company" 
                                        type="text" 
                                        id="customer-company">
@@ -521,45 +528,14 @@
 
                         <label for="project-details" class="text-size-medium-vw">Project Details</label>
                         <textarea id="project-details" 
-                                  name="message" 
+                                  name="project-details" 
                                   maxlength="5000" 
                                   placeholder="Tell us about your project requirements..." 
                                   class="text-field-contact w-input"></textarea>
 
-                        <!-- Hidden field for hours -->
-                        <input type="hidden" name="hours" id="formspree-hours" value="1">
-                        <input type="hidden" name="amount" id="formspree-amount" value="$10.00">
-                        <input type="hidden" name="service" value="Hourly Design Services">
-                    </div>
-
-                    <!-- Submit to Formspree Button -->
-                    <div class="contact-button">
-                        <div class="button-primary">
-                            <input type="submit" 
-                                   data-wait="Please wait..." 
-                                   class="submit-button w-button" 
-                                   value="Send Project Details"
-                                   id="formspree-submit">
-                            <div class="text-weight-medium caps">Send Project Details</div>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- SpaceRemit Payment Form -->
-                <form id="spaceremit-form" class="payment-form">
-                    <!-- Hidden fields for SpaceRemit -->
-                    <input type="hidden" name="amount" value="10.00" id="payment-amount">
-                    <input type="hidden" name="currency" value="USD">
-                    <input type="hidden" name="fullname" value="" id="payment-fullname">
-                    <input type="hidden" name="email" value="" id="payment-email">
-                    <input type="hidden" name="phone" value="" id="payment-phone">
-                    <input type="hidden" name="notes" value="" id="payment-notes">
-
-                    <div class="form-content">
                         <!-- Payment Method Selection -->
                         <div class="payment-method-section">
                             <h4 class="form-section-title">Payment Method</h4>
-                            <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">First send your project details above, then proceed with payment.</p>
                             
                             <!-- Local Payment Methods -->
                             <div class="sp-one-type-select">
@@ -585,14 +561,14 @@
                         </div>
                     </div>
 
-                    <!-- Payment Submit Button -->
+                    <!-- Submit Button -->
                     <div class="contact-button">
                         <div class="button-primary">
                             <input type="submit" 
                                    data-wait="Please wait..." 
                                    class="submit-button w-button" 
                                    value="Process Payment"
-                                   id="payment-submit-btn">
+                                   id="submit-btn">
                             <div class="text-weight-medium caps">Process Payment</div>
                         </div>
                     </div>
@@ -618,7 +594,7 @@
     <!-- SpaceRemit Configuration Script -->
     <script>
         // SpaceRemit Configuration - Using your TEST keys
-        const SP_PUBLIC_KEY = "test_pk4YTFRP4VMMFMIG3VFTNCNRWF9IEAQG5OIFG5X1D65VX69K201K";
+        const SP_PUBLIC_KEY = "pkGYSGWG6OTVCY20AA7YETVQI1BMUSR03YJ39UNW9Z10AN5CPDB4";
         const SP_FORM_ID = "#spaceremit-form";
         const SP_SELECT_RADIO_NAME = "sp-pay-type-radio";
         const LOCAL_METHODS_BOX_STATUS = true;
