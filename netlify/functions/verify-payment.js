@@ -51,8 +51,7 @@ exports.handler = async (event, context) => {
 
     // Get SpaceRemit private key from environment variables
     const SPACEREMIT_PRIVATE_KEY = process.env.SPACEREMIT_PRIVATE_KEY || 
-                                   process.env.SPACEREMIT_TEST_PRIVATE_KEY ||
-                                   'test_skCZYMU2ZJL58A7E011B0VJY7I5GXLV0KP4DPRMUVTWX5QQGSW10';
+                                   process.env.SPACEREMIT_TEST_PRIVATE_KEY;
     
     if (!SPACEREMIT_PRIVATE_KEY) {
       console.error('SpaceRemit private key not configured');
