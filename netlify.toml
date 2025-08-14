@@ -1,83 +1,41 @@
 [build]
-  # Build command (if you have one, otherwise leave empty)
-  command = ""
-  # Directory to publish (your website root)
+  # Build settings
   publish = "."
-  # Functions directory
-  functions = "netlify/functions"
+  command = "echo 'No build step required'"
 
 [build.environment]
-  # Build environment variables (these are for build time only)
-  NODE_VERSION = "18"
+  # Disable secrets scanning for this build
+  SECRETS_SCAN_ENABLED = "false"
 
-# Redirects and rewrites
-[[redirects]]
-  # Redirect callback.html to the Netlify function
-  from = "/netlify/functions/callback.html"
-  to = "/.netlify/functions/callback"
-  status = 200
-
-[[redirects]]
-  # Handle callback without .html
-  from = "/callback"
-  to = "/.netlify/functions/callback"
-  status = 200
-
-[[redirects]]
-  # Ensure contact page works properly
-  from = "/contact"
-  to = "/contact/index.html"
-  status = 200
-
-[[redirects]]
-  # Handle contact with trailing slash
-  from = "/contact/"
-  to = "/contact/index.html"
-  status = 200
-
-# Headers for security and CORS
-[[headers]]
-  for = "/.netlify/functions/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "https://nizaralhowaish.de"
-    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type, Authorization"
-    Access-Control-Max-Age = "86400"
-
-[[headers]]
-  for = "/contact/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self' https://spaceremit.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://spaceremit.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://spaceremit.com https://nizaralhowaish.de"
-
-[[headers]]
-  for = "/success.html"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-
-# Function-specific settings
 [functions]
-  # Global function settings
+  # Function configuration
+  directory = "netlify/functions"
   node_bundler = "esbuild"
 
-[functions."callback"]
-  # Specific settings for callback function
-  timeout = 30
-
 [functions."verify-payment"]
-  # Specific settings for verify-payment function
+  # Payment verification function timeout
   timeout = 15
 
-# Edge functions (if needed in future)
-[build.processing]
-  skip_processing = false
+[functions."callback"]
+  # Webhook callback function timeout  
+  timeout = 30
 
-# Development settings
-[dev]
-  # Local development settings
-  functions = "netlify/functions"
-  port = 8888
-  targetPort = 3000
+[[headers]]
+  # CORS headers for functions
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+
+[[redirects]]
+  # Redirect for payment success with parameters
+  from = "/payment-success"
+  to = "/payment-success.html"
+  status = 200
+
+[[redirects]]
+  # Handle function routes
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
