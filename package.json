@@ -1,0 +1,16 @@
+{
+  "name": "nizaralhowaish-website",
+  "version": "1.0.0",
+  "description": "Nizar Al-Howaish Design Services Website with SpaceRemit Payment Integration",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'No build step required'"
+  },
+  "author": "Nizar Al-Howaish",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
