@@ -469,15 +469,8 @@
 
             <!-- Payment Form -->
             <div class="payment-form-wrapper w-form">
-                <form id="spaceremit-form" class="payment-form">
-                    <!-- Hidden fields for SpaceRemit -->
-                    <input type="hidden" name="amount" value="10.00" id="payment-amount">
-                    <input type="hidden" name="currency" value="USD">
-                    <input type="hidden" name="fullname" value="" id="payment-fullname">
-                    <input type="hidden" name="email" value="" id="payment-email">
-                    <input type="hidden" name="phone" value="" id="payment-phone">
-                    <input type="hidden" name="notes" value="" id="payment-notes">
-
+                <!-- Customer Info Form (sends to Formspree) -->
+                <form action="https://formspree.io/f/xkgbrbyz" method="POST" id="customer-info-form" class="payment-form" style="margin-bottom: 30px;">
                     <div class="form-content">
                         <!-- Customer Information -->
                         <h4 class="form-section-title">Customer Information</h4>
@@ -487,7 +480,7 @@
                                 <label for="customer-name" class="text-size-medium-vw">Name</label>
                                 <input class="text-field-contact w-input" 
                                        maxlength="256" 
-                                       name="customer-name" 
+                                       name="name" 
                                        placeholder="Enter your name" 
                                        type="text" 
                                        id="customer-name" 
@@ -497,7 +490,7 @@
                                 <label for="customer-email" class="text-size-medium-vw">E-mail</label>
                                 <input class="text-field-contact w-input" 
                                        maxlength="256" 
-                                       name="customer-email" 
+                                       name="email" 
                                        placeholder="Enter your e-mail" 
                                        type="email" 
                                        id="customer-email" 
@@ -510,7 +503,7 @@
                                 <label for="customer-phone" class="text-size-medium-vw">Phone Number</label>
                                 <input class="text-field-contact w-input" 
                                        maxlength="256" 
-                                       name="customer-phone" 
+                                       name="phone" 
                                        placeholder="Enter your phone" 
                                        type="tel" 
                                        id="customer-phone">
@@ -519,7 +512,7 @@
                                 <label for="customer-company" class="text-size-medium-vw">Company (Optional)</label>
                                 <input class="text-field-contact w-input" 
                                        maxlength="256" 
-                                       name="customer-company" 
+                                       name="company" 
                                        placeholder="Enter your company" 
                                        type="text" 
                                        id="customer-company">
@@ -528,49 +521,75 @@
 
                         <label for="project-details" class="text-size-medium-vw">Project Details</label>
                         <textarea id="project-details" 
-                                  name="project-details" 
+                                  name="message" 
                                   maxlength="5000" 
                                   placeholder="Tell us about your project requirements..." 
                                   class="text-field-contact w-input"></textarea>
 
-                        <!-- Payment Method Selection -->
-                        <div class="payment-method-section">
-                            <h4 class="form-section-title">Payment Method</h4>
-                            
-                            <!-- Local Payment Methods -->
-                            <div class="sp-one-type-select">
-                                <input type="radio" name="sp-pay-type-radio" value="local-methods-pay" id="sp_local_methods_radio" checked>
-                                <label for="sp_local_methods_radio">
-                                    💳 Local Payment Methods
-                                </label>
-                                <div id="spaceremit-local-methods-pay">
-                                    Local payment options will be loaded here based on your location.
-                                </div>
-                            </div>
-
-                            <!-- Card Payment -->
-                            <div class="sp-one-type-select">
-                                <input type="radio" name="sp-pay-type-radio" value="card-pay" id="sp_card_radio">
-                                <label for="sp_card_radio">
-                                    💳 Credit/Debit Card
-                                </label>
-                                <div id="spaceremit-card-pay">
-                                    Secure card payment processing via SpaceRemit.
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Hidden field for hours -->
+                        <input type="hidden" name="hours" id="formspree-hours" value="1">
+                        <input type="hidden" name="amount" id="formspree-amount" value="$10.00">
+                        <input type="hidden" name="service" value="Hourly Design Services">
                     </div>
 
-                    <!-- Submit Button -->
+                    <!-- Submit to Formspree Button -->
                     <div class="contact-button">
                         <div class="button-primary">
                             <input type="submit" 
                                    data-wait="Please wait..." 
                                    class="submit-button w-button" 
-                                   value="Process Payment"
-                                   id="submit-btn">
-                            <div class="text-weight-medium caps">Process Payment</div>
+                                   value="Send Project Details"
+                                   id="formspree-submit">
+                            <div class="text-weight-medium caps">Send Project Details</div>
                         </div>
+                    </div>
+                </form>
+
+                <!-- SpaceRemit Payment Form - Following documentation structure exactly -->
+                <form id="spaceremit-form" class="payment-form">
+                    <!-- Hidden fields for SpaceRemit - exact structure from documentation -->
+                    <input type="hidden" name="amount" value="10.00" id="payment-amount">
+                    <input type="hidden" name="currency" value="USD">
+                    <input type="hidden" name="fullname" value="" id="payment-fullname">
+                    <input type="hidden" name="email" value="" id="payment-email">
+                    <input type="hidden" name="phone" value="" id="payment-phone">
+                    <input type="hidden" name="notes" value="" id="payment-notes">
+
+                    <div class="form-content">
+                        <!-- Payment Method Selection - exact structure from documentation -->
+                        <div class="payment-method-section">
+                            <h4 class="form-section-title">Payment Method</h4>
+                            <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">First send your project details above, then proceed with payment.</p>
+                            
+                            <!-- Container for local payment methods - exact class name from docs -->
+                            <div class="sp-one-type-select">
+                                <!-- Local payment methods radio button - exact structure -->
+                                <input type="radio" name="sp-pay-type-radio" value="local-methods-pay" id="sp_local_methods_radio" checked>
+                                <label for="sp_local_methods_radio">
+                                    <div>Local payment methods</div>
+                                </label>
+                                <!-- Container for displaying local payment methods - exact ID from docs -->
+                                <div id="spaceremit-local-methods-pay"></div>
+                            </div>
+
+                            <!-- Container for card payment - exact class name from docs -->
+                            <div class="sp-one-type-select">
+                                <!-- Card payment radio button - exact structure -->
+                                <input type="radio" name="sp-pay-type-radio" value="card-pay" id="sp_card_radio">
+                                <label for="sp_card_radio">
+                                    <div>Card payment</div>
+                                </label>
+                                <!-- Container for card payment - exact ID from docs -->
+                                <div id="spaceremit-card-pay"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Button to submit the form - simple structure as per docs -->
+                    <div class="contact-button">
+                        <button type="submit" class="button-primary" id="payment-submit-btn" style="border: none; width: 100%;">
+                            <div class="text-weight-medium caps">Pay</div>
+                        </button>
                     </div>
 
                     <!-- Security Notice -->
@@ -593,15 +612,15 @@
 
     <!-- SpaceRemit Configuration Script -->
     <script>
-        // SpaceRemit Configuration - Using your TEST keys
-        const SP_PUBLIC_KEY = "pkGYSGWG6OTVCY20AA7YETVQI1BMUSR03YJ39UNW9Z10AN5CPDB4";
+        // SpaceRemit Configuration - Following official documentation exactly
+        const SP_PUBLIC_KEY = "test_pk4YTFRP4VMMFMIG3VFTNCNRWF9IEAQG5OIFG5X1D65VX69K201K";
         const SP_FORM_ID = "#spaceremit-form";
         const SP_SELECT_RADIO_NAME = "sp-pay-type-radio";
         const LOCAL_METHODS_BOX_STATUS = true;
         const LOCAL_METHODS_PARENT_ID = "#spaceremit-local-methods-pay";
         const CARD_BOX_STATUS = true;
         const CARD_BOX_PARENT_ID = "#spaceremit-card-pay";
-        let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = false;
+        let SP_FORM_AUTO_SUBMIT_WHEN_GET_CODE = true; // FIXED: Set to true as per documentation
 
         // Callback function for successful payment
         function SP_SUCCESSFUL_PAYMENT(spaceremit_code) {
@@ -617,10 +636,10 @@
             showMessage('Payment failed. Please try again.', 'error');
         }
 
-        // Callback function for receiving message
+        // Callback function for receiving message - Following documentation exactly
         function SP_RECIVED_MESSAGE(message) {
             console.log('SpaceRemit message:', message);
-            showMessage(message, 'info');
+            alert(message); // As per documentation default behavior
             
             // If payment method is disabled, show specific help
             if (message.toLowerCase().includes('disabled')) {
@@ -645,8 +664,12 @@
             function updatePrice() {
                 const hours = parseFloat(hoursInput.value) || 0.1;
                 const total = hours * 10; // $10 per hour
-                totalPriceDisplay.textContent = `$${total.toFixed(2)}`;
+                totalPriceDisplay.textContent = `${total.toFixed(2)}`;
                 paymentAmountField.value = total.toFixed(2);
+                
+                // Update Formspree hidden fields
+                document.getElementById('formspree-hours').value = hours;
+                document.getElementById('formspree-amount').value = `${total.toFixed(2)}`;
                 
                 // Update notes
                 const hoursText = hours === 1 ? 'hour' : 'hours';
@@ -670,14 +693,14 @@
                 });
             });
 
-            // Form field synchronization
+            // Form field synchronization for both forms
             const customerName = document.getElementById('customer-name');
             const customerEmail = document.getElementById('customer-email');
             const customerPhone = document.getElementById('customer-phone');
             const projectDetails = document.getElementById('project-details');
             const customerCompany = document.getElementById('customer-company');
 
-            // Sync customer info to hidden fields
+            // Sync customer info to SpaceRemit hidden fields
             function syncCustomerInfo() {
                 document.getElementById('payment-fullname').value = customerName.value;
                 document.getElementById('payment-email').value = customerEmail.value;
@@ -700,13 +723,22 @@
             projectDetails.addEventListener('input', syncCustomerInfo);
             customerCompany.addEventListener('input', syncCustomerInfo);
 
-            // Form submission handling
+            // Formspree form submission
+            document.getElementById('customer-info-form').addEventListener('submit', function(e) {
+                // Let Formspree handle the submission naturally
+                // Show success message
+                setTimeout(() => {
+                    showMessage('Project details sent successfully! You can now proceed with payment below.', 'success');
+                }, 1000);
+            });
+
+            // SpaceRemit form submission handling
             document.getElementById('spaceremit-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 // Validate required fields
                 if (!customerName.value || !customerEmail.value) {
-                    showMessage('Please fill in all required fields.', 'error');
+                    showMessage('Please fill in your contact details and send them first using the form above.', 'error');
                     return;
                 }
 
@@ -723,7 +755,7 @@
 
                 // Show loading
                 document.getElementById('loading-overlay').style.display = 'flex';
-                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('payment-submit-btn').disabled = true;
 
                 // The form will be processed by SpaceRemit's JavaScript
             });
@@ -784,12 +816,12 @@
                     }, 2000);
                 } else {
                     showMessage('Payment verification failed. Please contact support.', 'error');
-                    document.getElementById('submit-btn').disabled = false;
+                    document.getElementById('payment-submit-btn').disabled = false;
                 }
             } catch (error) {
                 console.error('Payment verification error:', error);
                 showMessage('Payment verification error. Please contact support.', 'error');
-                document.getElementById('submit-btn').disabled = false;
+                document.getElementById('payment-submit-btn').disabled = false;
             }
         }
     </script>
